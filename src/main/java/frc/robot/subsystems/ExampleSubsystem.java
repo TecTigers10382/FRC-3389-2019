@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * @author FRC Team 3389 TEC Tigers
  */
 public class ExampleSubsystem extends Subsystem {
-  // Commands that use this subsystem.
+	// Commands that use this subsystem.
 
-  @Override
-  public void initDefaultCommand() {
-    // setDefaultCommand(new MySpecialCommand());
-  }
+	@Override
+	public void initDefaultCommand() {
+		// setDefaultCommand(new MySpecialCommand());
+	}
 }
