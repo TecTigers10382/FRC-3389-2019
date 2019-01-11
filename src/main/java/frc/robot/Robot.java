@@ -21,6 +21,8 @@ import frc.robot.subsystems.ExampleSubsystem;
  * documentation. If you change the name of this class or the package after
  * creating this project, you must also update the build.gradle file in the
  * project.
+ * 
+ * @author FRC Team 3389 TEC Tigers
  */
 public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
