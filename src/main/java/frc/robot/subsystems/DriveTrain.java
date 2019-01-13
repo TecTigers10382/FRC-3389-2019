@@ -28,7 +28,7 @@ public class DriveTrain extends Subsystem {
 	public TalonSRX rightFront;
 	public TalonSRX rightRear;
 
-	public DriveTrain(){
+	public DriveTrain() {
 		leftFront = new TalonSRX(RobotMap.DRIVE_LEFTFRONT);
 		leftRear = new TalonSRX(RobotMap.DRIVE_LEFTREAR);
 		rightFront = new TalonSRX(RobotMap.DRIVE_RIGHTFRONT);
@@ -36,24 +36,24 @@ public class DriveTrain extends Subsystem {
 	}
 
 	public void mecanumDrive_Cartesian(double x, double y, double rotation) {
-	
+
 		double xIn = x;
 		double yIn = y;
 		// Negate y for the joystick.
 		yIn = -yIn;
-	
+
 		double[] wheelSpeeds = new double[kMaxNumberOfMotors];
 		wheelSpeeds[RobotMap.DRIVE_LEFTFRONT] = xIn + yIn + rotation;
 		wheelSpeeds[RobotMap.DRIVE_RIGHTFRONT] = -xIn + yIn - rotation;
 		wheelSpeeds[RobotMap.DRIVE_LEFTREAR] = -xIn + yIn + rotation;
 		wheelSpeeds[RobotMap.DRIVE_RIGHTREAR] = xIn + yIn - rotation;
-	
+
 		normalize(wheelSpeeds);
 		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
 		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
 		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
 		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
-	  }
+	}
 
 	/**
 	 * Normalize all wheel speeds if the magnitude of any wheel is greater than 1.0.
@@ -61,20 +61,21 @@ public class DriveTrain extends Subsystem {
 	protected static void normalize(double[] wheelSpeeds) {
 		double maxMagnitude = Math.abs(wheelSpeeds[0]);
 		for (int i = 1; i < kMaxNumberOfMotors; i++) {
-		double temp = Math.abs(wheelSpeeds[i]);
-		if (maxMagnitude < temp) {
-			maxMagnitude = temp;
-		}
+			double temp = Math.abs(wheelSpeeds[i]);
+			if (maxMagnitude < temp) {
+				maxMagnitude = temp;
+			}
 		}
 		if (maxMagnitude > 1.0) {
-		for (int i = 0; i < kMaxNumberOfMotors; i++) {
-			wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
-		}
+			for (int i = 0; i < kMaxNumberOfMotors; i++) {
+				wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
+			}
 		}
 	}
-  	/**
-   	 * Rotate a vector in Cartesian space.
-     */
+
+	/**
+	 * Rotate a vector in Cartesian space.
+	 */
 	protected static double[] rotateVector(double x, double y, double angle) {
 		double cosA = Math.cos(angle * (Math.PI / 180.0));
 		double sinA = Math.sin(angle * (Math.PI / 180.0));
@@ -84,10 +85,9 @@ public class DriveTrain extends Subsystem {
 		return out;
 	}
 
-	public void stop(){
+	public void stop() {
 		mecanumDrive_Cartesian(0, 0, 0);
 	}
-
 
 	@Override
 	public void initDefaultCommand() {
