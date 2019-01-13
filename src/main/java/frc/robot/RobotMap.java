@@ -16,6 +16,10 @@ package frc.robot;
  * @author FRC Team 3389 TEC Tigers
  */
 public class RobotMap {
+
+	public final static int DRIVE_LEFTFRONT = 0, DRIVE_LEFTREAR = 1, DRIVE_RIGHTFRONT = 2, DRIVE_RIGHTREAR = 3;
+	
+	public static final int LEFT_X_STICK = 5, LEFT_Y_STICK = 4, RIGHT_DRIVE_STICK = 1;
 	// For example to map the left and right motors, you could define the
 	// following variables to use with your drivetrain subsystem.
 	// public static int leftMotor = 1;
