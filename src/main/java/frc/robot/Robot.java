@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
 	public static OI operatorControllers;
 
 	public static final DriveTrain driveTrain = new DriveTrain();
+
+	public static final Intake intake = new Intake();
 
 
 	Command m_autonomousCommand;
