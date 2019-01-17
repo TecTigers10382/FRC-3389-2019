@@ -17,9 +17,19 @@ package frc.robot;
  */
 public class RobotMap {
 
+	/**
+	 * CAN IDs of all Talon SRXs used for drive train
+	 */
 	public final static int DRIVE_LEFTFRONT = 0, DRIVE_LEFTREAR = 1, DRIVE_RIGHTFRONT = 2, DRIVE_RIGHTREAR = 3;
 	
+	public final static int INTAKE = 4;
+
+
 	public static final int LEFT_X_STICK = 5, LEFT_Y_STICK = 4, RIGHT_DRIVE_STICK = 1;
+	
+
+
+	public static final double DEADZONE = 0.1;
 	// For example to map the left and right motors, you could define the
 	// following variables to use with your drivetrain subsystem.
 	// public static int leftMotor = 1;

@@ -15,9 +15,11 @@ import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
 
 /**
- * Put Description here.
+ * Subsystem for the drive train of the robot. Contains the 4 talons necessary
+ * for the operation of all the motors in order to move the robot.
  *
  * @author FRC Team 3389 TEC Tigers
+ * 
  */
 public class DriveTrain extends Subsystem {
 	// Commands that use this subsystem.
@@ -28,6 +30,9 @@ public class DriveTrain extends Subsystem {
 	public TalonSRX rightFront;
 	public TalonSRX rightRear;
 
+	/**
+	 * Creates the Drive Train with 4 TalonSRX motor controllers over CAN.
+	 */
 	public DriveTrain() {
 		leftFront = new TalonSRX(RobotMap.DRIVE_LEFTFRONT);
 		leftRear = new TalonSRX(RobotMap.DRIVE_LEFTREAR);
@@ -35,6 +40,18 @@ public class DriveTrain extends Subsystem {
 		rightRear = new TalonSRX(RobotMap.DRIVE_RIGHTREAR);
 	}
 
+	/**
+	 * Drives the Drive Train with 1 analog stick's x & y values to move forward & backward and
+	 * strafe left & right. Another analog stick's x values determine rotation.
+	 * 
+	 * 
+	 * @param x
+	 *            value of left stick x from -1.0 to 1.0
+	 * @param y
+	 *            value of left stick y from -1.0 to 1.0
+	 * @param rotation
+	 *            value of right stick x from -1.0 to 1.0
+	 */
 	public void mecanumDrive_Cartesian(double x, double y, double rotation) {
 
 		double xIn = x;
@@ -85,13 +102,22 @@ public class DriveTrain extends Subsystem {
 		return out;
 	}
 
+	/**
+	 * Stops all Talons.
+	 */
 	public void stop() {
 		mecanumDrive_Cartesian(0, 0, 0);
 	}
 
+	/**
+	 * Initializes the DriveTrain's default command to the Drive command. The
+	 * default for this subsystem is the associated teliop command.
+	 * 
+	 * @see frc.robot.commands.TeleOpDrive
+	 */
 	@Override
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleOpDrive());
-		// setDefaultCommand(new MySpecialCommand());
+
 	}
 }

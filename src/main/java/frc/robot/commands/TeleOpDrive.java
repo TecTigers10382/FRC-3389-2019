@@ -14,14 +14,22 @@ import frc.robot.RobotMap;
 import frc.robot.subsystems.DriveTrain;
 
 /**
- * Put description here.
+ * Tele-Op command that continuously updates the DriveTrain with the values
+ * from the left Joystick
  *
  * @author FRC Team 3389 TEC Tigers
+ * @see frc.robot.subsystems.DriveTrain
+ * 
  */
 public class TeleOpDrive extends Command {
 	Joystick driveStick;
 	DriveTrain drive;
 
+	/**
+	 * Constructor gains control of the DriveTrain subsystem of the robot.
+	 * 
+	 * @see frc.robot.subsystems.DriveTrain
+	 */
 	public TeleOpDrive() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.driveTrain);
@@ -30,42 +38,56 @@ public class TeleOpDrive extends Command {
 		driveStick = Robot.operatorControllers.getDriverJoystick();
 	}
 
-	// Called just before this Command runs the first time
+	/**
+	 * Initialize is called each time the command is going to be used
+	 * 
+	 */
 	@Override
 	protected void initialize() {
 	}
 
-	// Called repeatedly when this Command is scheduled to run
+	/**
+	 * As the command is run, updates the joystick values and controls the
+	 * DriveTrain with them.
+	 * 
+	 * @see frc.robot.subsystems.DriveTrain
+	 */
 	@Override
 	protected void execute() {
 		double x = driveStick.getRawAxis(RobotMap.LEFT_X_STICK);
 		double y = driveStick.getRawAxis(RobotMap.LEFT_Y_STICK);
 		double rotation = driveStick.getRawAxis(RobotMap.RIGHT_DRIVE_STICK);
 
-		if (Math.abs(x) < 0.1)
+		if (Math.abs(x) < RobotMap.DEADZONE)
 			x = 0;
-		if (Math.abs(y) < 0.1)
+		if (Math.abs(y) < RobotMap.DEADZONE)
 			y = 0;
-		if (Math.abs(rotation) < 0.1)
+		if (Math.abs(rotation) < RobotMap.DEADZONE)
 			rotation = 0;
 
 		drive.mecanumDrive_Cartesian(x, y, rotation);
 	}
 
-	// Make this return true when this Command no longer needs to run execute()
+	/**
+	 * Never allows Drive command to finish on its own terms.
+	 */
 	@Override
 	protected boolean isFinished() {
 		return false;
 	}
 
-	// Called once after isFinished returns true
+	/**
+	 * Stops drivetrain's motion if command is ended with isFinished
+	 * 
+	 */
 	@Override
 	protected void end() {
 		drive.stop();
 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
+	/**
+	 * Stops drivetrain's motion if another command is ran that needs it.
+	 */
 	@Override
 	protected void interrupted() {
 		end();
