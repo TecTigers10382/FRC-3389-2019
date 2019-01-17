@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
 import frc.robot.RobotMap;
@@ -38,19 +40,22 @@ public class DriveTrain extends Subsystem {
 		leftRear = new TalonSRX(RobotMap.DRIVE_LEFTREAR);
 		rightFront = new TalonSRX(RobotMap.DRIVE_RIGHTFRONT);
 		rightRear = new TalonSRX(RobotMap.DRIVE_RIGHTREAR);
+
+		leftFront.setInverted(false);
+		leftRear.setInverted(false);
+		rightFront.setInverted(true);
+		rightRear.setInverted(true);
 	}
 
 	/**
-	 * Drives the Drive Train with 1 analog stick's x & y values to move forward & backward and
-	 * strafe left & right. Another analog stick's x values determine rotation.
+	 * Drives the Drive Train with 1 analog stick's x & y values to move forward &
+	 * backward and strafe left & right. Another analog stick's x values determine
+	 * rotation.
 	 * 
 	 * 
-	 * @param x
-	 *            value of left stick x from -1.0 to 1.0
-	 * @param y
-	 *            value of left stick y from -1.0 to 1.0
-	 * @param rotation
-	 *            value of right stick x from -1.0 to 1.0
+	 * @param x        value of left stick x from -1.0 to 1.0
+	 * @param y        value of left stick y from -1.0 to 1.0
+	 * @param rotation value of right stick x from -1.0 to 1.0
 	 */
 	public void mecanumDrive_Cartesian(double x, double y, double rotation) {
 
@@ -60,16 +65,16 @@ public class DriveTrain extends Subsystem {
 		yIn = -yIn;
 
 		double[] wheelSpeeds = new double[kMaxNumberOfMotors];
-		wheelSpeeds[RobotMap.DRIVE_LEFTFRONT] = xIn + yIn + rotation;
-		wheelSpeeds[RobotMap.DRIVE_RIGHTFRONT] = -xIn + yIn - rotation;
-		wheelSpeeds[RobotMap.DRIVE_LEFTREAR] = -xIn + yIn + rotation;
-		wheelSpeeds[RobotMap.DRIVE_RIGHTREAR] = xIn + yIn - rotation;
+		wheelSpeeds[0] = xIn + yIn + rotation;
+		wheelSpeeds[1] = -xIn + yIn - rotation;
+		wheelSpeeds[2] = -xIn + yIn + rotation;
+		wheelSpeeds[3] = xIn + yIn - rotation;
 
 		normalize(wheelSpeeds);
-		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
-		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
-		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
-		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
+		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[0] * m_maxOutput);
+		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[1] * m_maxOutput);
+		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[2] * m_maxOutput);
+		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[3] * m_maxOutput);
 	}
 
 	/**
