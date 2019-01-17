@@ -10,9 +10,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
 
@@ -75,6 +74,11 @@ public class DriveTrain extends Subsystem {
 		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[1] * m_maxOutput);
 		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[2] * m_maxOutput);
 		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[3] * m_maxOutput);
+
+		SmartDashboard.putNumber("Speeds FL", wheelSpeeds[0]);
+		SmartDashboard.putNumber("Speeds FR", wheelSpeeds[1]);
+		SmartDashboard.putNumber("Speeds RL", wheelSpeeds[2]);
+		SmartDashboard.putNumber("Speeds RR", wheelSpeeds[3]);
 	}
 
 	/**
