@@ -1,0 +1,73 @@
+!!com.snobot.simulator.config.v1.SimulatorConfigV1
+mAccelerometers: []
+mAnalogIn: []
+mAnalogOut: []
+mDefaultI2CWrappers: {}
+mDefaultSpiWrappers: {}
+mDigitalIO: []
+mEncoders: []
+mGyros: []
+mPwm:
+- mHandle: 100
+  mMotorModelConfig:
+    mGearReduction: 13.0
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: true
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: frontLeft
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 101
+  mMotorModelConfig:
+    mGearReduction: 13.0
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: true
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: backLeft
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 102
+  mMotorModelConfig:
+    mGearReduction: 13.0
+    mGearboxEfficiency: 1.0
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: frontRight
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 103
+  mMotorModelConfig:
+    mGearReduction: 13.0
+    mGearboxEfficiency: 0.8
+    mHasBrake: false
+    mInverted: false
+    mMotorType: CIM
+    mNumMotors: 1
+  mMotorSimConfig: !!com.snobot.simulator.motor_sim.RotationalLoadMotorSimulationConfig
+    mArmCenterOfMass: 0.0
+    mArmMass: 0.0
+    mConstantAssistTorque: 0.0
+    mOverCenterAssistTorque: 0.0
+  mName: backRight
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+mRelays: []
+mSimulatorComponents: []
+mSolenoids: []
