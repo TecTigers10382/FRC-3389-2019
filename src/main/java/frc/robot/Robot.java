@@ -16,6 +16,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,7 +34,7 @@ public class Robot extends TimedRobot {
 	public static final DriveTrain driveTrain = new DriveTrain();
 
 	public static final Intake intake = new Intake();
-
+    public static final Lift lift = new Lift();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
