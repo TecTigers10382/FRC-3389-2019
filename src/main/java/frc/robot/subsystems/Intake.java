@@ -24,6 +24,8 @@ import frc.robot.commands.TeleOpIntake;
  */
 public class Intake extends Subsystem {
 	// Commands that use this subsystem.
+	// TeleOpIntake
+
 	TalonSRX intake;
 
 	/**

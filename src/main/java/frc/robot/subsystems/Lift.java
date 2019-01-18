@@ -21,6 +21,9 @@ import frc.robot.RobotMap;
  * @author FRC Team 3389 TEC Tigers
  */
 public class Lift extends Subsystem {
+	// Commands that use this subsystem
+	// TeleOpLift
+
 	TalonSRX liftR, liftL;
 
 	public Lift() {
