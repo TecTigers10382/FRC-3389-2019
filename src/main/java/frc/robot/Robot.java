@@ -7,9 +7,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
@@ -41,6 +43,8 @@ public class Robot extends TimedRobot {
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+	public static NetworkTable lines;
+
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -57,6 +61,11 @@ public class Robot extends TimedRobot {
 			lift.configTalons(talonConfig.talon);
 			intake.configTalons(talonConfig.talon);
 		}
+
+		CameraServer.getInstance().startAutomaticCapture();
+
+		lines = NetworkTable.getTable("GRIP/lineReport");
+
 	}
 
 	/**
