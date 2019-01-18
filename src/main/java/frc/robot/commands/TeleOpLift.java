@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Lift;
 
 /**
  * Runs the lift using the operator's controller's right stick.
@@ -19,9 +20,11 @@ import frc.robot.RobotMap;
  */
 public class TeleOpLift extends Command {
 	Joystick joystick;
+	Lift lift;
 
 	public TeleOpLift() {
 		requires(Robot.lift);
+		lift = Robot.lift;
 		joystick = Robot.operatorControllers.getOperatorJoystick();
 	}
 
@@ -33,7 +36,12 @@ public class TeleOpLift extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.lift.rawLift(joystick.getRawAxis(RobotMap.LIFT_STICK));
+		double power = joystick.getRawAxis(RobotMap.LIFT_STICK);
+
+		if (Math.abs(power) < RobotMap.DEADZONE)
+			lift.rawLift(0);
+		else
+			lift.rawLift(power);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -45,11 +53,13 @@ public class TeleOpLift extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+		lift.stop();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
+		end();
 	}
 }

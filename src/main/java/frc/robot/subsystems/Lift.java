@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.commands.TeleOpLift;
 
 /**
  * Double reverse four bar lift that has 2 motors.
@@ -59,9 +60,16 @@ public class Lift extends Subsystem {
 		liftR.configAllSettings(t);
 	}
 
+	/**
+	 * Stops lift motors.
+	 */
+	public void stop() {
+		rawLift(0);
+	}
+
 	@Override
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
-		// setDefaultCommand(new TeleOpLift());
+		setDefaultCommand(new TeleOpLift());
 	}
 }
