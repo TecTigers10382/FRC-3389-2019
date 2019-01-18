@@ -12,6 +12,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
+/**
+ * Runs the lift using the operator's controller's right stick.
+ * 
+ * @author FRC Team 3389 TEC Tigers
+ */
 public class TeleOpLift extends Command {
 	Joystick joystick;
 

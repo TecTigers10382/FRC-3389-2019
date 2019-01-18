@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
 /**
- * Add your docs here.
+ * Double reverse four bar lift that has 2 motors.
+ * 
+ * @author FRC Team 3389 TEC Tigers
  */
 public class Lift extends Subsystem {
 	TalonSRX liftR, liftL;
@@ -30,6 +32,11 @@ public class Lift extends Subsystem {
 		liftL.setInverted(InvertType.OpposeMaster);
 	}
 
+	/**
+	 * Drives the motors of the lift directly by percentage
+	 * 
+	 * @param power percentage of power to lift motors (-1 to 1)
+	 */
 	public void rawLift(double power) {
 		liftR.set(ControlMode.PercentOutput, power);
 	}
@@ -37,6 +44,6 @@ public class Lift extends Subsystem {
 	@Override
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
-		// setDefaultCommand(new MySpecialCommand());
+		// setDefaultCommand(new TeleOpLift());
 	}
 }
