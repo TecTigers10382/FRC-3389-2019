@@ -18,25 +18,25 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Lift extends Subsystem {
-    TalonSRX liftR, liftL;
+	TalonSRX liftR, liftL;
 
-    public Lift() {
-        liftL = new TalonSRX(RobotMap.LIFT_LEFT);
-        liftR = new TalonSRX(RobotMap.LIFT_RIGHT);
+	public Lift() {
+		liftL = new TalonSRX(RobotMap.LIFT_LEFT);
+		liftR = new TalonSRX(RobotMap.LIFT_RIGHT);
 
-        liftL.follow(liftR);
+		liftL.follow(liftR);
 
-        liftR.setInverted(false);
-        liftL.setInverted(InvertType.OpposeMaster);
-    }
+		liftR.setInverted(false);
+		liftL.setInverted(InvertType.OpposeMaster);
+	}
 
-    public void rawLift(double power) {
-        liftR.set(ControlMode.PercentOutput, power);
-    }
+	public void rawLift(double power) {
+		liftR.set(ControlMode.PercentOutput, power);
+	}
 
-    @Override
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        // setDefaultCommand(new MySpecialCommand());
-    }
+	@Override
+	public void initDefaultCommand() {
+		// Set the default command for a subsystem here.
+		// setDefaultCommand(new MySpecialCommand());
+	}
 }

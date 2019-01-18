@@ -10,11 +10,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
@@ -33,9 +30,9 @@ public class DriveTrain extends Subsystem {
 	public TalonSRX leftFront;
 	public TalonSRX leftRear;
 	public TalonSRX rightFront;
-    public TalonSRX rightRear;
-   
-    public DigitalInput line;
+	public TalonSRX rightRear;
+
+	public DigitalInput line;
 
 	/**
 	 * Creates the Drive Train with 4 TalonSRX motor controllers over CAN.
@@ -49,10 +46,9 @@ public class DriveTrain extends Subsystem {
 		leftFront.setInverted(false);
 		leftRear.setInverted(false);
 		rightFront.setInverted(true);
-        rightRear.setInverted(true);
-        
-        
-        line = new DigitalInput(0);
+		rightRear.setInverted(true);
+
+		line = new DigitalInput(0);
 	}
 
 	/**
@@ -137,9 +133,9 @@ public class DriveTrain extends Subsystem {
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleOpDrive());
 
-    }
-    
-    public boolean getLine(){
-        return line.get();
-    }
+	}
+
+	public boolean getLine() {
+		return line.get();
+	}
 }

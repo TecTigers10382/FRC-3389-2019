@@ -14,8 +14,8 @@ import frc.robot.RobotMap;
 import frc.robot.subsystems.DriveTrain;
 
 /**
- * Tele-Op command that continuously updates the DriveTrain with the values
- * from the left Joystick
+ * Tele-Op command that continuously updates the DriveTrain with the values from
+ * the left Joystick
  *
  * @author FRC Team 3389 TEC Tigers
  * @see frc.robot.subsystems.DriveTrain

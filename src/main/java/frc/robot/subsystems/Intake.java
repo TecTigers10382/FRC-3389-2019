@@ -15,8 +15,8 @@ import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpIntake;
 
 /**
- * Intake subsystem of robot. Intakes cargo using top roller.
- * Default command is TeleOpIntake
+ * Intake subsystem of robot. Intakes cargo using top roller. Default command is
+ * TeleOpIntake
  *
  * @author FRC Team 3389 TEC Tigers
  * @see frc.robot.commands.TeleOpIntake
@@ -35,8 +35,7 @@ public class Intake extends Subsystem {
 	/**
 	 * Intakes cargo by spinning motor at power
 	 * 
-	 * @param power
-	 *            power of motor from -1.0 to 1.0
+	 * @param power power of motor from -1.0 to 1.0
 	 */
 	public void drive(double power) {
 		intake.set(ControlMode.PercentOutput, power);
@@ -50,8 +49,8 @@ public class Intake extends Subsystem {
 	}
 
 	/**
-	 * Initializes the Intake's default command to the TeleOpIntake command.
-	 * The default for this subsystem is the associated teliop command. 
+	 * Initializes the Intake's default command to the TeleOpIntake command. The
+	 * default for this subsystem is the associated teliop command.
 	 * 
 	 * @see frc.robot.commands.TeleOpIntake
 	 */
