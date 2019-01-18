@@ -12,7 +12,9 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpLift;
 
@@ -26,6 +28,7 @@ public class Lift extends Subsystem {
 	// TeleOpLift
 
 	TalonSRX liftR, liftL;
+	Potentiometer pot;
 
 	public Lift() {
 		liftL = new TalonSRX(RobotMap.LIFT_LEFT);
@@ -35,6 +38,8 @@ public class Lift extends Subsystem {
 
 		liftR.setInverted(false);
 		liftL.setInverted(InvertType.OpposeMaster);
+
+		pot = new AnalogPotentiometer(RobotMap.POT_INPUT, 360, 0);
 	}
 
 	/**
@@ -65,6 +70,10 @@ public class Lift extends Subsystem {
 	 */
 	public void stop() {
 		rawLift(0);
+	}
+
+	public double getAngle() {
+		return pot.get();
 	}
 
 	@Override
