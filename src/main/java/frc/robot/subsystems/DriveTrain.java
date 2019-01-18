@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -121,6 +122,24 @@ public class DriveTrain extends Subsystem {
 	 */
 	public void stop() {
 		mecanumDrive_Cartesian(0, 0, 0);
+	}
+
+	/**
+	 * Configs all talons to factory defaults and then to the selected
+	 * configuration.
+	 * 
+	 * @param t A configuration for all Talon SRXs in the subsystem.
+	 */
+	public void configTalons(TalonSRXConfiguration t) {
+		leftFront.configFactoryDefault();
+		rightFront.configFactoryDefault();
+		leftRear.configFactoryDefault();
+		rightRear.configFactoryDefault();
+
+		leftFront.configAllSettings(t);
+		rightFront.configAllSettings(t);
+		leftRear.configAllSettings(t);
+		rightRear.configAllSettings(t);
 	}
 
 	/**

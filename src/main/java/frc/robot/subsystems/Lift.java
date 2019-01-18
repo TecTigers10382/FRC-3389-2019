@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -39,6 +40,20 @@ public class Lift extends Subsystem {
 	 */
 	public void rawLift(double power) {
 		liftR.set(ControlMode.PercentOutput, power);
+	}
+
+	/**
+	 * Configs all talons to factory defaults and then to the selected
+	 * configuration.
+	 * 
+	 * @param t A configuration for all Talon SRXs in the subsystem.
+	 */
+	public void configTalons(TalonSRXConfiguration t) {
+		liftL.configFactoryDefault();
+		liftR.configFactoryDefault();
+
+		liftL.configAllSettings(t);
+		liftR.configAllSettings(t);
 	}
 
 	@Override

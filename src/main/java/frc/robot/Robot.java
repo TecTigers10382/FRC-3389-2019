@@ -17,6 +17,7 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
+import frc.robot.utils.TalonConfig;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -30,11 +31,12 @@ import frc.robot.subsystems.Lift;
 public class Robot extends TimedRobot {
 	public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	public static OI operatorControllers;
+	public static TalonConfig talonConfig = new TalonConfig();
 
 	public static final DriveTrain driveTrain = new DriveTrain();
 
 	public static final Intake intake = new Intake();
-    public static final Lift lift = new Lift();
+	public static final Lift lift = new Lift();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -49,6 +51,12 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
 		// chooser.addOption("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+
+		if (RobotMap.CONFIG_TALONS) {
+			driveTrain.configTalons(talonConfig.talon);
+			lift.configTalons(talonConfig.talon);
+			intake.configTalons(talonConfig.talon);
+		}
 	}
 
 	/**
@@ -131,8 +139,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-        Scheduler.getInstance().run();
-        SmartDashboard.putBoolean("Line", driveTrain.getLine());
+		Scheduler.getInstance().run();
+		SmartDashboard.putBoolean("Line", driveTrain.getLine());
 	}
 
 	/**
