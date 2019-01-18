@@ -17,23 +17,39 @@ import frc.robot.subsystems.Lift;
  * Runs the lift using the operator's controller's right stick.
  * 
  * @author FRC Team 3389 TEC Tigers
+ * @see @see frc.robot.subsystems.Lift
  */
 public class TeleOpLift extends Command {
 	Joystick joystick;
 	Lift lift;
 
+	/**
+	 * Constructor gains control of the Lift subsystem of the robot.
+	 * 
+	 * @see frc.robot.subsystems.Lift
+	 */
 	public TeleOpLift() {
 		requires(Robot.lift);
 		lift = Robot.lift;
 		joystick = Robot.operatorControllers.getOperatorJoystick();
 	}
 
-	// Called just before this Command runs the first time
+	/**
+	 * Grabs the joystick from the OI object of the robot before running the
+	 * command.
+	 * 
+	 */
 	@Override
 	protected void initialize() {
 	}
 
-	// Called repeatedly when this Command is scheduled to run
+	/**
+	 * As the command is run, updates the joystick values and controls the Lift with
+	 * them.
+	 * 
+	 * @see frc.robot.subsystems.Lift
+	 * 
+	 */
 	@Override
 	protected void execute() {
 		double power = joystick.getRawAxis(RobotMap.LIFT_STICK);
@@ -44,20 +60,27 @@ public class TeleOpLift extends Command {
 			lift.rawLift(power);
 	}
 
-	// Make this return true when this Command no longer needs to run execute()
+	/**
+	 * Never allows Lift command to finish on its own terms.
+	 */
 	@Override
 	protected boolean isFinished() {
 		return false;
 	}
 
-	// Called once after isFinished returns true
+	/**
+	 * Stops lift's motion if command is ended with isFinished
+	 * 
+	 */
 	@Override
 	protected void end() {
 		lift.stop();
 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
+	/**
+	 * Stops lift's motion if another command is run that needs it.
+	 * 
+	 */
 	@Override
 	protected void interrupted() {
 		end();
