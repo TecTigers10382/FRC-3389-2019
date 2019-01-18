@@ -33,7 +33,7 @@ public class TeleOpLift extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-		Robot.lift.rawLift(joystick.getRawAxis(RobotMap.RIGHT_DRIVE_STICK));
+		Robot.lift.rawLift(joystick.getRawAxis(RobotMap.LIFT_STICK));
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
