@@ -68,6 +68,11 @@ mPwm:
     mOverCenterAssistTorque: 0.0
   mName: backRight
   mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
+- mHandle: 104
+  mMotorModelConfig: null
+  mMotorSimConfig: null
+  mName: CAN SC 4
+  mType: com.snobot.simulator.simulator_components.ctre.CtreTalonSrxSpeedControllerSim
 mRelays: []
 mSimulatorComponents: []
 mSolenoids: []
