@@ -8,10 +8,11 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
@@ -62,10 +63,9 @@ public class Robot extends TimedRobot {
 			intake.configTalons(talonConfig.talon);
 		}
 
+		// Starts streaming camera to driver station and gets results from GRIP
 		CameraServer.getInstance().startAutomaticCapture();
-
-		lines = NetworkTable.getTable("GRIP/lineReport");
-
+		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 	}
 
 	/**
