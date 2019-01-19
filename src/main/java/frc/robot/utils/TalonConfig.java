@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 /**
  * Creates default talon config.
+ * 
  * @author FRC Team 3389 TEC Tigers
  */
 public class TalonConfig {
@@ -90,9 +91,11 @@ public class TalonConfig {
 		// talon.slot3.closedLoopPeriod = 12;
 		// talon.auxPIDPolarity = true;
 		// talon.remoteFilter0.remoteSensorDeviceID = 22;
-		// talon.remoteFilter0.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Roll;
+		// talon.remoteFilter0.remoteSensorSource =
+		// RemoteSensorSource.GadgeteerPigeon_Roll;
 		// talon.remoteFilter1.remoteSensorDeviceID = 41;
-		// talon.remoteFilter1.remoteSensorSource = RemoteSensorSource.GadgeteerPigeon_Yaw;
+		// talon.remoteFilter1.remoteSensorSource =
+		// RemoteSensorSource.GadgeteerPigeon_Yaw;
 		// talon.motionCruiseVelocity = 37;
 		// talon.motionAcceleration = 3;
 		// talon.motionProfileTrajectoryPeriod = 11;

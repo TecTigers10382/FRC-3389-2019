@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -16,6 +19,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
+import frc.robot.utils.TalonConfig;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,14 +34,17 @@ import frc.robot.subsystems.Intake;
 public class Robot extends TimedRobot {
 	public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	public static OI operatorControllers;
+	public static TalonConfig talonConfig = new TalonConfig();
 
 	public static final DriveTrain driveTrain = new DriveTrain();
 
 	public static final Intake intake = new Intake();
-
+	public static final Lift lift = new Lift();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+	public static NetworkTable lines;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -48,6 +56,16 @@ public class Robot extends TimedRobot {
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
 		// chooser.addOption("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+
+		if (RobotMap.CONFIG_TALONS) {
+			driveTrain.configTalons(talonConfig.talon);
+			lift.configTalons(talonConfig.talon);
+			intake.configTalons(talonConfig.talon);
+		}
+
+		// Starts streaming camera to driver station and gets results from GRIP
+		CameraServer.getInstance().startAutomaticCapture();
+		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 	}
 
 	/**
@@ -131,6 +149,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		SmartDashboard.putBoolean("Line", driveTrain.getLine());
 	}
 
 	/**

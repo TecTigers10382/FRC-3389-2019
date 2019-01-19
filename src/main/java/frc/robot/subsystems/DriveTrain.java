@@ -9,8 +9,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
 
@@ -23,12 +26,16 @@ import frc.robot.commands.TeleOpDrive;
  */
 public class DriveTrain extends Subsystem {
 	// Commands that use this subsystem.
+	// TeleOpDrive
+
 	protected static final int kMaxNumberOfMotors = 4;
 	protected double m_maxOutput = 1;
 	public TalonSRX leftFront;
 	public TalonSRX leftRear;
 	public TalonSRX rightFront;
 	public TalonSRX rightRear;
+
+	public DigitalInput line;
 
 	/**
 	 * Creates the Drive Train with 4 TalonSRX motor controllers over CAN.
@@ -38,19 +45,24 @@ public class DriveTrain extends Subsystem {
 		leftRear = new TalonSRX(RobotMap.DRIVE_LEFTREAR);
 		rightFront = new TalonSRX(RobotMap.DRIVE_RIGHTFRONT);
 		rightRear = new TalonSRX(RobotMap.DRIVE_RIGHTREAR);
+
+		leftFront.setInverted(false);
+		leftRear.setInverted(false);
+		rightFront.setInverted(true);
+		rightRear.setInverted(true);
+
+		line = new DigitalInput(0);
 	}
 
 	/**
-	 * Drives the Drive Train with 1 analog stick's x & y values to move forward & backward and
-	 * strafe left & right. Another analog stick's x values determine rotation.
+	 * Drives the Drive Train with 1 analog stick's x & y values to move forward &
+	 * backward and strafe left & right. Another analog stick's x values determine
+	 * rotation.
 	 * 
 	 * 
-	 * @param x
-	 *            value of left stick x from -1.0 to 1.0
-	 * @param y
-	 *            value of left stick y from -1.0 to 1.0
-	 * @param rotation
-	 *            value of right stick x from -1.0 to 1.0
+	 * @param x        value of left stick x from -1.0 to 1.0
+	 * @param y        value of left stick y from -1.0 to 1.0
+	 * @param rotation value of right stick x from -1.0 to 1.0
 	 */
 	public void mecanumDrive_Cartesian(double x, double y, double rotation) {
 
@@ -60,16 +72,21 @@ public class DriveTrain extends Subsystem {
 		yIn = -yIn;
 
 		double[] wheelSpeeds = new double[kMaxNumberOfMotors];
-		wheelSpeeds[RobotMap.DRIVE_LEFTFRONT] = xIn + yIn + rotation;
-		wheelSpeeds[RobotMap.DRIVE_RIGHTFRONT] = -xIn + yIn - rotation;
-		wheelSpeeds[RobotMap.DRIVE_LEFTREAR] = -xIn + yIn + rotation;
-		wheelSpeeds[RobotMap.DRIVE_RIGHTREAR] = xIn + yIn - rotation;
+		wheelSpeeds[0] = xIn + yIn + rotation;
+		wheelSpeeds[1] = -xIn + yIn - rotation;
+		wheelSpeeds[2] = -xIn + yIn + rotation;
+		wheelSpeeds[3] = xIn + yIn - rotation;
 
 		normalize(wheelSpeeds);
-		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontLeft.value] * m_maxOutput);
-		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kFrontRight.value] * m_maxOutput);
-		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearLeft.value] * m_maxOutput);
-		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[MotorType.kRearRight.value] * m_maxOutput);
+		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[0] * m_maxOutput);
+		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[1] * m_maxOutput);
+		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[2] * m_maxOutput);
+		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[3] * m_maxOutput);
+
+		SmartDashboard.putNumber("Speeds FL", wheelSpeeds[0]);
+		SmartDashboard.putNumber("Speeds FR", wheelSpeeds[1]);
+		SmartDashboard.putNumber("Speeds RL", wheelSpeeds[2]);
+		SmartDashboard.putNumber("Speeds RR", wheelSpeeds[3]);
 	}
 
 	/**
@@ -110,6 +127,24 @@ public class DriveTrain extends Subsystem {
 	}
 
 	/**
+	 * Configs all talons to factory defaults and then to the selected
+	 * configuration.
+	 * 
+	 * @param t A configuration for all Talon SRXs in the subsystem.
+	 */
+	public void configTalons(TalonSRXConfiguration t) {
+		leftFront.configFactoryDefault();
+		rightFront.configFactoryDefault();
+		leftRear.configFactoryDefault();
+		rightRear.configFactoryDefault();
+
+		leftFront.configAllSettings(t);
+		rightFront.configAllSettings(t);
+		leftRear.configAllSettings(t);
+		rightRear.configAllSettings(t);
+	}
+
+	/**
 	 * Initializes the DriveTrain's default command to the Drive command. The
 	 * default for this subsystem is the associated teliop command.
 	 * 
@@ -119,5 +154,9 @@ public class DriveTrain extends Subsystem {
 	public void initDefaultCommand() {
 		setDefaultCommand(new TeleOpDrive());
 
+	}
+
+	public boolean getLine() {
+		return line.get();
 	}
 }

@@ -16,27 +16,39 @@ package frc.robot;
  * @author FRC Team 3389 TEC Tigers
  */
 public class RobotMap {
+	/**
+	 * CAN IDs of all Talon SRXs used for drive train.
+	 */
+	public final static int DRIVE_LEFTFRONT = 4, DRIVE_LEFTREAR = 0, DRIVE_RIGHTFRONT = 3, DRIVE_RIGHTREAR = 1;
 
 	/**
-	 * CAN IDs of all Talon SRXs used for drive train
+	 * CAN IDs of all Talon SRXs used for lift.
 	 */
-	public final static int DRIVE_LEFTFRONT = 0, DRIVE_LEFTREAR = 1, DRIVE_RIGHTFRONT = 2, DRIVE_RIGHTREAR = 3;
-	
-	public final static int INTAKE = 4;
+	public final static int LIFT_RIGHT = 5, LIFT_LEFT = 6;
 
+	/**
+	 * CAN IDs of all Talon SRXs used for intake.
+	 */
+	public final static int INTAKE = 2;
 
-	public static final int LEFT_X_STICK = 5, LEFT_Y_STICK = 4, RIGHT_DRIVE_STICK = 1;
-	
+	/**
+	 * IDs of axes on the joysticks.
+	 */
+	public static final int LEFT_X_STICK = 0, LEFT_Y_STICK = 1, RIGHT_DRIVE_STICK = 4;
+	public static final int INTAKE_STICK = 1, LIFT_STICK = 5;
 
+	public static final int POT_INPUT = 3;
 
+	/**
+	 * Amount of deadzone on the sticks of the joysticks.
+	 */
 	public static final double DEADZONE = 0.1;
-	// For example to map the left and right motors, you could define the
-	// following variables to use with your drivetrain subsystem.
-	// public static int leftMotor = 1;
-	// public static int rightMotor = 2;
 
-	// If you are using multiple modules, make sure to define both the port
-	// number and the module. For example you with a rangefinder:
-	// public static int rangefinderPort = 1;
-	// public static int rangefinderModule = 1;
+	/**
+	 * If true, will configure all talons to their factory defaults, then to the
+	 * configuration in utils/TalonConfig
+	 * 
+	 * @see frc.robot.utils.TalonConfig
+	 */
+	public final static boolean CONFIG_TALONS = false;
 }

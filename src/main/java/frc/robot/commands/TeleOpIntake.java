@@ -55,9 +55,9 @@ public class TeleOpIntake extends Command {
 	 */
 	@Override
 	protected void execute() {
-		double power = intakeStick.getRawAxis(1);
-		
-		if(Math.abs(power) < RobotMap.DEADZONE)
+		double power = intakeStick.getRawAxis(RobotMap.INTAKE_STICK);
+
+		if (Math.abs(power) < RobotMap.DEADZONE)
 			intake.drive(0);
 		else
 			intake.drive(power);
