@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class PIDExample extends Command {
 	// Set up PID constants
-	final double kP = 0, kI = 0, kD = 0;
+	final double kP = 0, kI = 0, kD = 0, kF = 0;
 
 	double integral = 0, lastError, target, error, power;
 	long lastTime, time;
@@ -50,7 +50,7 @@ public class PIDExample extends Command {
 		integral += error * (time - lastTime);
 
 		// Calculates output power to motor
-		power = kP * error + kI * integral + kD * ((error - lastError) / (time - lastTime));
+		power = kP * error + kI * integral + kD * ((error - lastError) / (time - lastTime)) + kF * target;
 
 		// Writes power to motor
 		out.pidWrite(power);
