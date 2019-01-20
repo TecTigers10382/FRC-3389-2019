@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
-import frc.robot.ioDevices.MPU9250;
+import frc.robot.ioDevices.GyroWrapper;
 
 /**
  * Subsystem for the drive train of the robot. Contains the 4 talons necessary
@@ -38,7 +38,7 @@ public class DriveTrain extends Subsystem {
 
 	public DigitalInput line;
 
-	public MPU9250 gyro;
+	public GyroWrapper gyro;
 
 	/**
 	 * Creates the Drive Train with 4 TalonSRX motor controllers over CAN.
@@ -56,7 +56,7 @@ public class DriveTrain extends Subsystem {
 
 		line = new DigitalInput(0);
 
-		gyro = new MPU9250();
+		gyro = new GyroWrapper();
 		gyro.startUpdatingThread();
 		gyro.resetValues();
 	}
@@ -167,7 +167,11 @@ public class DriveTrain extends Subsystem {
 		return line.get();
 	}
 
-	public double getGyro() {
-		return gyro.getFilteredYaw();
+	public GyroWrapper getGyro() {
+		return gyro;
+	}
+
+	public void resetGyro() {
+		gyro.resetValues();
 	}
 }
