@@ -10,11 +10,13 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoTurn;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -32,6 +34,8 @@ import frc.robot.utils.TalonConfig;
  * @author FRC Team 3389 TEC Tigers
  */
 public class Robot extends TimedRobot {
+	public static Preferences prefs = Preferences.getInstance();
+
 	public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	public static OI operatorControllers;
 	public static TalonConfig talonConfig = new TalonConfig();
@@ -54,7 +58,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		operatorControllers = new OI();
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-		// chooser.addOption("My Auto", new MyAutoCommand());
+		m_chooser.addOption("My Auto", new AutoTurn(driveTrain.getGyro(), 45));
 		SmartDashboard.putData("Auto mode", m_chooser);
 
 		if (RobotMap.CONFIG_TALONS) {
@@ -79,6 +83,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotPeriodic() {
+		SmartDashboard.putNumber("gyro", driveTrain.getGyro().getFilteredYaw());
 	}
 
 	/**
@@ -149,7 +154,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("gyro", driveTrain.getGyro());
 	}
 
 	/**
