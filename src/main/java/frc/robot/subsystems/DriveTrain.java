@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
-import frc.robot.ioDevices.GyroWrapper;
+import frc.robot.iodevices.GyroWrapper;
 
 /**
  * Subsystem for the drive train of the robot. Contains the 4 talons necessary

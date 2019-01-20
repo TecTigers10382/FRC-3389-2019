@@ -1,4 +1,4 @@
-package frc.robot.ioDevices;
+package frc.robot.iodevices;
 
 public class MPU9250 extends I2CUpdatableAddress {
 

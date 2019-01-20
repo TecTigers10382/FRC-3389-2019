@@ -1,4 +1,4 @@
-package frc.robot.ioDevices;
+package frc.robot.iodevices;
 
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) FIRST 2008-2017. All Rights Reserved.                        */
