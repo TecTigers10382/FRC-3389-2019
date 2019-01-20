@@ -1,7 +1,5 @@
 package frc.robot.ioDevices;
 
-import frc.robot.Robot;
-
 public class MPU9250 extends I2CUpdatableAddress {
 
 	/*
@@ -651,7 +649,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 
 		pause(3000); // let the MPU stabilize for 3 seconds
 
-		// TODO - we really should not be doing the logo here but it makes it easy and
+		// we really should not be doing the logo here but it makes it easy and
 		// we are running out of time
 		// Robot.robotScreen.updateBitmap(OLEDBitmap.GAME.getData(),
 		// OLEDBitmap.LOGO.getWidth(),
@@ -684,8 +682,8 @@ public class MPU9250 extends I2CUpdatableAddress {
 		gyroAngularSpeedOffsetY /= nbReadings;
 		gyroAngularSpeedOffsetZ /= nbReadings;
 
-		// TODO - we really should not be doing the logo here but it makes it easy and
-		// // we are running out of time
+		// we really should not be doing the logo here but it makes it easy and
+		// we are running out of time
 		// Robot.robotScreen.updateBitmap(OLEDBitmap.READY.getData(),
 		// OLEDBitmap.LOGO.getWidth(),
 		// OLEDBitmap.LOGO.getHeight(), 0, 0);
@@ -958,8 +956,8 @@ public class MPU9250 extends I2CUpdatableAddress {
 	public void updateRegisterValue(int address, int value) {
 		this.writeByte(address, value);
 		// we check that the value of the register has been updated
-		byte[] data = new byte[1];
-		boolean failed = readByte(address, data);
+		// byte[] data = new byte[1];
+		// boolean failed = readByte(address, data);
 		// if (failed)
 		// Robot.robotLogger.log(Logger.ERROR, this, "confirmation read failed");
 		// if (data[0] != value)
@@ -974,13 +972,13 @@ public class MPU9250 extends I2CUpdatableAddress {
 	 * @param registerAddress the address of the register to read.
 	 * @return the int representation of the content of the register.
 	 */
-	private int readRegisterValue(int registerAddress) {
-		byte[] data = new byte[1];
-		boolean failed = readByte(registerAddress, data);
-		// if (failed)
-		// Robot.robotLogger.log(Logger.INFO, this, "read failed");
-		return (int) data[0];
-	}
+	// private int readRegisterValue(int registerAddress) {
+	// byte[] data = new byte[1];
+	// boolean failed = readByte(registerAddress, data);
+	// if (failed)
+	// Robot.robotLogger.log(Logger.INFO, this, "read failed");
+	// return (int) data[0];
+	// }
 
 	/**
 	 * Reads the content of two consecutive registers, starting at registerAddress,
@@ -993,7 +991,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 	 */
 	private int readWord2C(int registerAddress) {
 		short[] data = new short[1];
-		boolean failed = readShort(registerAddress, data);
+		// boolean failed = readShort(registerAddress, data);
 		// if (failed)
 		// Robot.robotLogger.log(Logger.INFO, this, "read failed");
 		return (int) data[0];

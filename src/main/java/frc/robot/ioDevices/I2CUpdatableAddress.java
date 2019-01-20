@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 
 //import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.I2C;
-import frc.robot.Robot;
 
 /**
  * I2C bus interface class.
@@ -33,6 +32,10 @@ public class I2CUpdatableAddress extends I2C {
 		super(port, deviceAddress);
 		this._port = port;
 		this._device = deviceAddress;
+	}
+
+	public Port getPort() {
+		return _port;
 	}
 
 	/**
