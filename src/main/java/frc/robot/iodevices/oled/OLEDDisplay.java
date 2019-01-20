@@ -24,6 +24,7 @@ import java.util.Arrays;
 import frc.robot.Robot;
 import frc.robot.iodevices.I2CUpdatableAddress;
 
+@SuppressWarnings("unused")
 public class OLEDDisplay extends I2CUpdatableAddress {
 
 	private static final int defaultAddress = 0x3C;
