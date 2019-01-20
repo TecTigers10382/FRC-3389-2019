@@ -149,7 +149,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		SmartDashboard.putBoolean("Line", driveTrain.getLine());
+		SmartDashboard.putNumber("gyro", driveTrain.getGyro());
 	}
 
 	/**

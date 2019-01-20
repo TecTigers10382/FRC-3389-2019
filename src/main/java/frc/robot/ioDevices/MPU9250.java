@@ -709,6 +709,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 		} else {
 			// Robot.robotLogger.log(Logger.INFO, this, "Updating thread of the MPU9250 is
 			// already started.");
+			System.out.println("MPU thread already started!");
 		}
 	}
 
