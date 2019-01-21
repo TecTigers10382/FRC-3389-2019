@@ -76,7 +76,6 @@ public class AutoTurn extends Command {
 		// try {
 		// wait(250);
 		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
 	}
