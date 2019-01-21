@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoTurn;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.Intake;
@@ -50,6 +51,8 @@ public class Robot extends TimedRobot {
 
 	public static NetworkTable lines;
 
+	public static OLEDDisplay robotScreen;
+
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -70,6 +73,8 @@ public class Robot extends TimedRobot {
 		// Starts streaming camera to driver station and gets results from GRIP
 		CameraServer.getInstance().startAutomaticCapture();
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
+
+		robotScreen = new OLEDDisplay();
 	}
 
 	/**
