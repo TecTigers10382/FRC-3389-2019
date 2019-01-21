@@ -24,6 +24,7 @@ import java.util.Arrays;
 import frc.robot.Robot;
 import frc.robot.iodevices.I2CUpdatableAddress;
 
+@SuppressWarnings("unused")
 public class OLEDDisplay extends I2CUpdatableAddress {
 
 	private static final int defaultAddress = 0x3C;
@@ -783,7 +784,7 @@ public class OLEDDisplay extends I2CUpdatableAddress {
 		// line level refreshes had a bug so we just do a full refresh until we fix it
 		refresh();
 
-		// TODO test if this new code actually works
+		// test if this new code actually works
 		/*
 		 * int firstX = line * currentFont.getOuterHeight(); int lastX =
 		 * Math.max((line+1) * currentFont.getOuterHeight(), getHeight()); // the
@@ -813,7 +814,7 @@ public class OLEDDisplay extends I2CUpdatableAddress {
 	// vertical scrolling must be implemented in software
 
 	public synchronized void scrollVerticalLine(int lines) {
-		// TODO need to implement buffer shift and redisplay
+		// need to implement buffer shift and redisplay
 	}
 
 	public synchronized void scrollVerticalCharacter(OLEDFont font, int chars) {

@@ -262,7 +262,7 @@ public enum OLEDFont {
 
 			for (int j = 0; j < height; ++j) {
 				// support invert text
-				display.setPixel(x + i, y + j, ((line & 0x01) > 0) ? display.WHITE : display.BLACK);
+				display.setPixel(x + i, y + j, ((line & 0x01) > 0) ? OLEDDisplay.WHITE : OLEDDisplay.BLACK);
 				line >>= 1;
 			}
 		}
