@@ -8,6 +8,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.TeleOpHP;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -18,13 +21,20 @@ import edu.wpi.first.wpilibj.Joystick;
 public class OI {
 	Joystick jsDriver = new Joystick(0);
 	Joystick jsOperator = new Joystick(1);
-	
+
+	Button claw = new JoystickButton(jsOperator, 5);
+
+	public OI() {
+
+		claw.toggleWhenPressed(new TeleOpHP());
+	}
+
 	/**
 	 * Let's other objects get values from the left joystick.
 	 * 
 	 * @return Returns the leftStick object
 	 */
-	public Joystick getDriverJoystick(){
+	public Joystick getDriverJoystick() {
 		return jsDriver;
 	}
 
@@ -37,7 +47,6 @@ public class OI {
 		return jsOperator;
 	}
 
-	
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.

@@ -19,6 +19,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.utils.TalonConfig;
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
 
 	public static final Intake intake = new Intake();
 	public static final Lift lift = new Lift();
+	public static final HPClaw claw = new HPClaw();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
