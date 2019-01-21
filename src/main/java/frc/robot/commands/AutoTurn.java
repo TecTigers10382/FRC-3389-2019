@@ -36,11 +36,11 @@ public class AutoTurn extends Command {
 		Robot.driveTrain.resetGyro();
 		lastError = target - input.pidGet();
 		lastTime = System.currentTimeMillis();
-		kP = Robot.prefs.getDouble("kP", 0);
+		kP = Robot.prefs.getDouble("kP", kP);
 		SmartDashboard.putNumber("kP", kP);
-		kI = Robot.prefs.getDouble("kI", 0);
-		kD = Robot.prefs.getDouble("kD", 0);
-		kF = Robot.prefs.getDouble("kF", 0);
+		kI = Robot.prefs.getDouble("kI", kI);
+		kD = Robot.prefs.getDouble("kD", kD);
+		kF = Robot.prefs.getDouble("kF", kF);
 	}
 
 	// Called repeatedly when this Command is scheduled to run
