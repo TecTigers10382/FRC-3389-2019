@@ -24,6 +24,9 @@ public class OI {
 
 	Button claw = new JoystickButton(jsOperator, 5);
 
+	/**
+	 * Sets up claw as toggle button to control the hatch panel claw.
+	 */
 	public OI() {
 
 		claw.toggleWhenPressed(new TeleOpHP());
