@@ -646,9 +646,9 @@ public class MPU9250 extends I2CUpdatableAddress {
 	private void calibrateSensors() {
 		// Robot.robotLogger.log(Logger.INFO, this, "Calibration starting in 3 seconds
 		// (don't move the sensor)");
-
+		System.out.println("Gyro Calibration Beginning...");
 		pause(3000); // let the MPU stabilize for 3 seconds
-
+		System.out.println();
 		// we really should not be doing the logo here but it makes it easy and
 		// we are running out of time
 		// Robot.robotScreen.updateBitmap(OLEDBitmap.GAME.getData(),
@@ -676,6 +676,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 			// Robot.robotScreen.updateGraphBar(0, Robot.robotScreen.getHeight() - 8
 			// ,Robot.robotScreen.getWidth(), 8,
 			// ((double) (i + 1) / (double) nbReadings));
+			System.out.print(".");
 			pause(100);
 		}
 		gyroAngularSpeedOffsetX /= nbReadings;
@@ -689,6 +690,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 		// OLEDBitmap.LOGO.getHeight(), 0, 0);
 
 		// Robot.robotLogger.log(Logger.INFO, this, "Calibration ended");
+		System.out.println("Gyro Calibration Finished!");
 	}
 
 	/**
