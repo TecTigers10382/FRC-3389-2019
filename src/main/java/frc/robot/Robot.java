@@ -11,11 +11,13 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.CameraTurn;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
@@ -54,6 +56,8 @@ public class Robot extends TimedRobot {
 
 	UsbCamera camera;
 
+	public static Preferences prefs;
+
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -62,7 +66,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		operatorControllers = new OI();
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-		// chooser.addOption("My Auto", new MyAutoCommand());
+		m_chooser.addOption("Camera Tester", new CameraTurn(driveTrain.getGyro(), 0));
 		SmartDashboard.putData("Auto mode", m_chooser);
 
 		if (RobotMap.CONFIG_TALONS) {
@@ -74,13 +78,15 @@ public class Robot extends TimedRobot {
 		// Starts streaming camera to driver station and gets results from GRIP
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setBrightness(0);
-		camera.setExposureManual(20);
+		camera.setExposureManual(50);
 		camera.setFPS(10);
 		camera.setWhiteBalanceManual(0);
 
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 
 		robotScreen = new OLEDDisplay();
+
+		prefs = Preferences.getInstance();
 	}
 
 	/**
