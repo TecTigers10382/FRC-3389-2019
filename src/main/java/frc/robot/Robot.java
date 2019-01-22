@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
 		// Starts streaming camera to driver station and gets results from GRIP
 		camera = CameraServer.getInstance().startAutomaticCapture();
 		camera.setBrightness(0);
-		camera.setExposureManual(50);
+		camera.setExposureManual(0);
 		camera.setFPS(10);
 		camera.setWhiteBalanceManual(0);
 
