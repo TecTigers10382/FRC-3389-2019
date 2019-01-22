@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -51,6 +52,8 @@ public class Robot extends TimedRobot {
 
 	public static OLEDDisplay robotScreen;
 
+	UsbCamera camera;
+
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -69,7 +72,12 @@ public class Robot extends TimedRobot {
 		}
 
 		// Starts streaming camera to driver station and gets results from GRIP
-		CameraServer.getInstance().startAutomaticCapture();
+		camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setBrightness(0);
+		camera.setExposureManual(20);
+		camera.setFPS(10);
+		camera.setWhiteBalanceManual(0);
+
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 
 		robotScreen = new OLEDDisplay();
