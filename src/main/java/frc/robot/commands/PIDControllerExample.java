@@ -18,6 +18,7 @@ public class PIDControllerExample extends Command {
 	// Set up PID constants
 	double kP = 0.0005, kI = 0.00001, kD = 0, kF = 0;
 	final double TOLERANCE = 5;
+	final int BUFLENGTH = 10;
 	PIDController pidController;
 
 	boolean done = false;
@@ -45,6 +46,8 @@ public class PIDControllerExample extends Command {
 		// eg. requires(chassis);
 		pidController = new PIDController(kP, kI, kD, kF, source, output);
 		pidController.setPercentTolerance(TOLERANCE);
+		pidController.setOutputRange(-1, 1);
+		pidController.setToleranceBuffer(BUFLENGTH);
 	}
 
 	// Called just before this Command runs the first time
