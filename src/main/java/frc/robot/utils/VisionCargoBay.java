@@ -19,12 +19,15 @@ import frc.robot.utils.vision.Pose;
  * @author FRC Team 3389 TEC Tigers
  */
 public class VisionCargoBay {
+	// All units are in inches and radians unless otherwise noted.
+
 	NetworkTable input;
 
 	final int IMAGE_WIDTH = 128;
 	final int IMAGE_HEIGHT = 64;
-	// degrees
+	// camera FOV in degrees.
 	final double FOV_H = 61;
+	// Uses FOV to find the focal length of the camera.
 	final double FOCAL_LENGTH = IMAGE_WIDTH / (2 * Math.atan(Math.toRadians(FOV_H) / 2));
 
 	final double CAMERA_X = 0;
@@ -33,9 +36,12 @@ public class VisionCargoBay {
 	final double CAMERA_YAW = 0;
 	final double CAMERA_PITCH = 0;
 	// Please do not roll the camera I don't account for it.
-	// If you want to figure out the math for me please.
+	// If you want to, figure out the math for me please.
 	final double CAMERA_ROLL = 0;
 
+	/**
+	 * Height of target center in inches measured from the ground.
+	 */
 	final double TARGET_HEIGHT = 3 * 12 + 3 + 1.0 / 8.0 - 5.5 / 2.0;
 
 	/**
@@ -44,18 +50,18 @@ public class VisionCargoBay {
 	Pose cameraLocation;
 
 	/**
-	 * Stores target location relative to camera.
-	 */
-	Vector3d targetL;
-	Vector3d targetR;
-
-	/**
 	 * Stores target location relative to robot.
 	 */
-	Vector3d targetC;
+	Vector3d targetL, targetR, targetC;
 
+	/**
+	 * Stores a vector from the left side of the target to the right.
+	 */
 	Vector3d line;
 
+	/**
+	 * @param table A network table that contains a contour report.
+	 */
 	public VisionCargoBay(NetworkTable table) {
 		input = table;
 		cameraLocation = new Pose(CAMERA_X, CAMERA_Y, CAMERA_Z, CAMERA_YAW, CAMERA_PITCH, CAMERA_ROLL);
@@ -69,20 +75,23 @@ public class VisionCargoBay {
 	 * the robot.
 	 */
 	void processData() {
-		double[] defaultValue = null;
-		double[] areas = input.getEntry("area").getDoubleArray(defaultValue);
+		double[] defaultValue = new double[0];
 		double[] centerX = input.getEntry("centerX").getDoubleArray(defaultValue);
 		double[] centerY = input.getEntry("centerY").getDoubleArray(defaultValue);
 
-		if (areas != null && areas.length != 1) {
+		// Checks that the camera has actually found the target.
+		if (centerX.length >= 2) {
 			double cXLeft, cXRight, cY;
-			if (areas.length > 2) {
+			// Checks that there isn't too many targets, and hopefully in the future will
+			// find the middle target and approach that one.
+			if (centerX.length > 2) {
 				System.out.println("Woah nelly there's a lot of targets here!");
-				// TODO find way to only get center target.
+				// TODO find way to only get center target so it's not just erroring.
 				cXLeft = 0;
 				cXRight = 0;
 				cY = 0;
 			} else {
+				// Makes sure the left side is on the left.
 				if (centerX[1] > centerX[0]) {
 					cXLeft = centerX[0];
 					cXRight = centerX[1];
@@ -90,12 +99,15 @@ public class VisionCargoBay {
 					cXLeft = centerX[1];
 					cXRight = centerX[0];
 				}
+				// (As long as there is no roll) the targets should have the same Y coordinate.
+				// Since we have two might as well take the average to make sure the Y is as
+				// close as possible.
 				cY = (centerY[0] + centerY[1]) / 2;
 			}
-			// Gives angle relative to center y line, left is negative
+			// Gives angle in radians relative to center y line, left is negative
 			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
 			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
-			// Gives angle relative to center x line, down is negative
+			// Gives angle in radians relative to center x line, down is negative
 			double pitch = Math.atan((cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
 
 			// Rotate target angles to robot's reference frame
@@ -103,25 +115,39 @@ public class VisionCargoBay {
 			yawRight = yawRight + cameraLocation.yaw;
 			pitch = pitch + cameraLocation.pitch;
 
+			// Using some trig (see MAGIC), converts the pitch and yaw to unit vectors in
+			// the direction of the target for each side.
 			targetL.set(Math.sin(yawLeft) * Math.cos(pitch), Math.cos(yawLeft) * Math.cos(pitch), Math.sin(pitch));
-			targetL.normalize();
-
 			targetR.set(Math.sin(yawRight) * Math.cos(pitch), Math.cos(yawRight) * Math.cos(pitch), Math.sin(pitch));
+
+			// ***JUST*** in case they aren't actually unit vectors (which is impossible),
+			// normalizes vectors.
+			targetL.normalize();
 			targetR.normalize();
-			// r(t) = <0,0,0> + t*(targetLocation);
-			// plane: z = TARGET_HEIGHT;
-			// line : z = t*targetLocation.z;
-			// t = TARGET_HEIGHT/targetLocation.z;
+
+			// Finds what factor causes the unit vectors to intersect with with the plane..
+			// z = TARGET_HEIGHT
+			//
+			// equation of line: r(t) = t*(targetLocation);
+			// plane (relative to camera): z = TARGET_HEIGHT - cameraLocation.z;
+			// z part of line: z = t*targetLocation.z;
+			// t = (TARGET_HEIGHT-cameraLocation.z)/targetLocation.z;
+			// Scaling the vector by this t will make the end of it where the target is in 3
+			// space.
 			targetL.scale((TARGET_HEIGHT - cameraLocation.z) / targetL.z);
 			targetR.scale((TARGET_HEIGHT - cameraLocation.z) / targetR.z);
 
-			// By having the point of the left and right side we have a line segment in
-			// space of the target.
-
-			// Sets position of target relative to the center of the robot
+			// Sets position of target relative to the center of the robot.
 			targetC.set((targetL.x + targetR.x) / 2 + cameraLocation.x, (targetL.y + targetR.y) / 2 + cameraLocation.y,
 					(targetL.z + targetR.z) / 2 + cameraLocation.z);
 
+			// Sets positions of left and right vectors so they are relative to robot
+			// center.
+			targetL.add(cameraLocation.getPoint());
+			targetR.add(cameraLocation.getPoint());
+
+			// By having the point of the left and right side we have a line segment in
+			// space of the target.
 			// Store projection of the vector from left to right on XY plane.
 			line.set(targetR.x - targetL.x, targetR.y - targetL.y, 0);
 		} else {
