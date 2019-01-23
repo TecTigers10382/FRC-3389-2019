@@ -7,9 +7,6 @@
 
 package frc.robot.utils;
 
-import java.util.Vector;
-
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -54,15 +51,19 @@ public class VisionCargoBay {
 	/**
 	 * Stores target location relative to robot.
 	 */
-	Point3d target;
+	Vector3d target;
 
 	public VisionCargoBay(NetworkTable table) {
 		input = table;
 		cameraLocation = new Pose(CAMERA_X, CAMERA_Y, CAMERA_Z, CAMERA_YAW, CAMERA_PITCH, CAMERA_ROLL);
 		targetLocation = new Vector3d();
-		target = new Point3d();
+		target = new Vector3d();
 	}
 
+	/**
+	 * Processes data from network tables to update the target location relative to
+	 * the robot.
+	 */
 	void processData() {
 		double[] defaultValue = null;
 		double[] areas = input.getEntry("area").getDoubleArray(defaultValue);
@@ -72,6 +73,7 @@ public class VisionCargoBay {
 		if (areas != null && areas.length != 1) {
 			double cX, cY;
 			if (areas.length > 2) {
+				System.out.println("Woah nelly there's a lot of targets here!");
 				// TODO find way to only get center target.
 				cX = 0;
 				cY = 0;
@@ -106,5 +108,19 @@ public class VisionCargoBay {
 		} else {
 			System.out.println("ERROR Camera failed to find any targets");
 		}
+	}
+
+	/**
+	 * @return Distance from center of robot to target projected onto XY plane.
+	 */
+	public double getDistanceXY() {
+		return Math.sqrt(Math.pow(target.x, 2) + Math.pow(target.y, 2));
+	}
+
+	/**
+	 * @return Degress relative to robot y axis to target. CW is positive.
+	 */
+	public double yawDegrees() {
+		return Math.toDegrees(Math.atan(target.x / target.y));
 	}
 }
