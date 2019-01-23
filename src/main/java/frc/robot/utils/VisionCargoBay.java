@@ -141,7 +141,15 @@ public class VisionCargoBay {
 	 *         target face. CCW is positive.
 	 */
 	public double yawDegrees() {
-		return Math.atan(line.y / line.x);
+		return Math.toDegrees(Math.atan(line.y / line.x));
+	}
+
+	/**
+	 * @return Degrees needed to rotate so the robot is facing the target. CW is
+	 *         positive.
+	 */
+	public double rawDegrees() {
+		return Math.toDegrees(Math.atan(targetC.y / targetC.x));
 	}
 
 	/**
