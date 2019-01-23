@@ -26,6 +26,7 @@ import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.utils.TalonConfig;
+import frc.robot.utils.VisionCargoBay;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -51,6 +52,9 @@ public class Robot extends TimedRobot {
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 	public static NetworkTable lines;
+
+	public static NetworkTable bayReport;
+	public static VisionCargoBay bay;
 
 	public static OLEDDisplay robotScreen;
 
@@ -83,6 +87,9 @@ public class Robot extends TimedRobot {
 		camera.setWhiteBalanceManual(0);
 
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
+
+		bayReport = NetworkTableInstance.getDefault().getTable("GRIP/bayReport");
+		bay = new VisionCargoBay(bayReport);
 
 		robotScreen = new OLEDDisplay();
 
@@ -177,5 +184,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		bay.processData();
+
+		SmartDashboard.putNumber("Distance XY", bay.getDistanceXY());
+		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());
+		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
+		SmartDashboard.putNumber("Distance X", bay.distanceX());
+		SmartDashboard.putNumber("Distance Y", bay.distanceY());
 	}
 }

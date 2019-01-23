@@ -75,7 +75,7 @@ public class VisionCargoBay {
 	 * Processes data from network tables to update the target location relative to
 	 * the robot.
 	 */
-	void processData() {
+	public void processData() {
 		double[] defaultValue = new double[0];
 		double[] centerX = input.getEntry("centerX").getDoubleArray(defaultValue);
 		double[] centerY = input.getEntry("centerY").getDoubleArray(defaultValue);
