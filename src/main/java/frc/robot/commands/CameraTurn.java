@@ -72,16 +72,6 @@ public class CameraTurn extends Command {
 		// Sets up variables for next time
 		lastTime = time;
 		lastError = error;
-
-		// Checks if it has reached target
-		// if (Math.abs(error) < 1)
-		// done = true;
-		// try {
-		// wait(250);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
 	}
 
 	private double getTarget() {
