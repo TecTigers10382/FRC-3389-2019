@@ -46,18 +46,22 @@ public class VisionCargoBay {
 	/**
 	 * Stores target location relative to camera.
 	 */
-	Vector3d targetLocation;
+	Vector3d targetL;
+	Vector3d targetR;
 
 	/**
 	 * Stores target location relative to robot.
 	 */
-	Vector3d target;
+	Vector3d targetC;
+
+	Vector3d line;
 
 	public VisionCargoBay(NetworkTable table) {
 		input = table;
 		cameraLocation = new Pose(CAMERA_X, CAMERA_Y, CAMERA_Z, CAMERA_YAW, CAMERA_PITCH, CAMERA_ROLL);
-		targetLocation = new Vector3d();
-		target = new Vector3d();
+		targetL = new Vector3d();
+		targetC = new Vector3d();
+		line = new Vector3d();
 	}
 
 	/**
@@ -71,40 +75,55 @@ public class VisionCargoBay {
 		double[] centerY = input.getEntry("centerY").getDoubleArray(defaultValue);
 
 		if (areas != null && areas.length != 1) {
-			double cX, cY;
+			double cXLeft, cXRight, cY;
 			if (areas.length > 2) {
 				System.out.println("Woah nelly there's a lot of targets here!");
 				// TODO find way to only get center target.
-				cX = 0;
+				cXLeft = 0;
+				cXRight = 0;
 				cY = 0;
 			} else {
 				if (centerX[1] > centerX[0]) {
-					cX = centerX[1] - centerX[0];
+					cXLeft = centerX[0];
+					cXRight = centerX[1];
 				} else {
-					cX = centerX[0] - centerX[1];
+					cXLeft = centerX[1];
+					cXRight = centerX[0];
 				}
 				cY = (centerY[0] + centerY[1]) / 2;
 			}
 			// Gives angle relative to center y line, left is negative
-			double yaw = Math.atan((cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
+			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
+			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
 			// Gives angle relative to center x line, down is negative
 			double pitch = Math.atan((cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
 
 			// Rotate target angles to robot's reference frame
-			yaw = yaw + cameraLocation.yaw;
+			yawLeft = yawLeft + cameraLocation.yaw;
+			yawRight = yawRight + cameraLocation.yaw;
 			pitch = pitch + cameraLocation.pitch;
 
-			targetLocation.set(Math.sin(yaw) * Math.cos(pitch), Math.cos(yaw) * Math.cos(pitch), Math.sin(pitch));
-			targetLocation.normalize();
+			targetL.set(Math.sin(yawLeft) * Math.cos(pitch), Math.cos(yawLeft) * Math.cos(pitch), Math.sin(pitch));
+			targetL.normalize();
+
+			targetR.set(Math.sin(yawRight) * Math.cos(pitch), Math.cos(yawRight) * Math.cos(pitch), Math.sin(pitch));
+			targetR.normalize();
 			// r(t) = <0,0,0> + t*(targetLocation);
 			// plane: z = TARGET_HEIGHT;
 			// line : z = t*targetLocation.z;
 			// t = TARGET_HEIGHT/targetLocation.z;
-			targetLocation.scale((TARGET_HEIGHT - cameraLocation.z) / targetLocation.z);
+			targetL.scale((TARGET_HEIGHT - cameraLocation.z) / targetL.z);
+			targetR.scale((TARGET_HEIGHT - cameraLocation.z) / targetR.z);
+
+			// By having the point of the left and right side we have a line segment in
+			// space of the target.
 
 			// Sets position of target relative to the center of the robot
-			target.set(targetLocation.x + cameraLocation.x, targetLocation.y + cameraLocation.y,
-					targetLocation.z + cameraLocation.z);
+			targetC.set((targetL.x + targetR.x) / 2 + cameraLocation.x, (targetL.y + targetR.y) / 2 + cameraLocation.y,
+					(targetL.z + targetR.z) / 2 + cameraLocation.z);
+
+			// Store projection of the vector from left to right on XY plane.
+			line.set(targetR.x - targetL.x, targetR.y - targetL.y, 0);
 		} else {
 			System.out.println("ERROR Camera failed to find any targets");
 		}
@@ -114,13 +133,38 @@ public class VisionCargoBay {
 	 * @return Distance from center of robot to target projected onto XY plane.
 	 */
 	public double getDistanceXY() {
-		return Math.sqrt(Math.pow(target.x, 2) + Math.pow(target.y, 2));
+		return Math.sqrt(Math.pow(targetC.x, 2) + Math.pow(targetC.y, 2));
 	}
 
 	/**
-	 * @return Degress relative to robot y axis to target. CW is positive.
+	 * @return Degrees needed to be rotated until robot x axis is parrallel to
+	 *         target face. CCW is positive.
 	 */
 	public double yawDegrees() {
-		return Math.toDegrees(Math.atan(target.x / target.y));
+		return Math.atan(line.y / line.x);
+	}
+
+	/**
+	 * @return Distance needed to be traveled in the x direction after the robot has
+	 *         rotated.
+	 */
+	public double distanceX() {
+		// Angle needed to be turned
+		double yaw = Math.atan(line.y / line.x);
+		// Rotation of axes
+		double xPrimeC = targetC.x * Math.cos(yaw) + targetC.y * Math.sin(yaw);
+		return xPrimeC;
+	}
+
+	/**
+	 * @return Distance needed to be traveled in the y direction after the robot has
+	 *         rotated.
+	 */
+	public double distancY() {
+		// Angle needed to be turned
+		double yaw = Math.atan(line.y / line.x);
+		// Rotation of axes
+		double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
+		return yPrimeC;
 	}
 }
