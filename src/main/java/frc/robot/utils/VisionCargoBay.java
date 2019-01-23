@@ -66,6 +66,7 @@ public class VisionCargoBay {
 		input = table;
 		cameraLocation = new Pose(CAMERA_X, CAMERA_Y, CAMERA_Z, CAMERA_YAW, CAMERA_PITCH, CAMERA_ROLL);
 		targetL = new Vector3d();
+		targetR = new Vector3d();
 		targetC = new Vector3d();
 		line = new Vector3d();
 	}
