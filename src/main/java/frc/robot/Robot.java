@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoTurn;
+import frc.robot.commands.CameraTurn;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.utils.TalonConfig;
+import frc.robot.utils.VisionCargoBay;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -36,8 +38,6 @@ import frc.robot.utils.TalonConfig;
  * @author FRC Team 3389 TEC Tigers
  */
 public class Robot extends TimedRobot {
-	public static Preferences prefs = Preferences.getInstance();
-
 	public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
 	public static OI operatorControllers;
 	public static TalonConfig talonConfig = new TalonConfig();
@@ -53,7 +53,14 @@ public class Robot extends TimedRobot {
 
 	public static NetworkTable lines;
 
+	public static NetworkTable bayReport;
+	public static VisionCargoBay bay;
+
 	public static OLEDDisplay robotScreen;
+
+	UsbCamera camera;
+
+	public static Preferences prefs;
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -63,7 +70,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		operatorControllers = new OI();
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-		m_chooser.addOption("My Auto", new AutoTurn(driveTrain.getGyro(), 45));
+		m_chooser.addOption("Camera Tester", new CameraTurn(driveTrain.getGyro(), 0));
 		SmartDashboard.putData("Auto mode", m_chooser);
 
 		if (RobotMap.CONFIG_TALONS) {
@@ -73,10 +80,20 @@ public class Robot extends TimedRobot {
 		}
 
 		// Starts streaming camera to driver station and gets results from GRIP
-		CameraServer.getInstance().startAutomaticCapture();
+		camera = CameraServer.getInstance().startAutomaticCapture();
+		camera.setBrightness(0);
+		camera.setExposureManual(0);
+		camera.setFPS(10);
+		camera.setWhiteBalanceManual(0);
+
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 
+		bayReport = NetworkTableInstance.getDefault().getTable("GRIP/bayReport");
+		bay = new VisionCargoBay(bayReport);
+
 		robotScreen = new OLEDDisplay();
+
+		prefs = Preferences.getInstance();
 	}
 
 	/**
@@ -168,5 +185,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		bay.processData();
+
+		SmartDashboard.putNumber("Distance XY", bay.getDistanceXY());
+		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());
+		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
+		SmartDashboard.putNumber("Distance X", bay.distanceX());
+		SmartDashboard.putNumber("Distance Y", bay.distanceY());
 	}
 }

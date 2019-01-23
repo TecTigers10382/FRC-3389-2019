@@ -16,6 +16,10 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class GyroWrapper extends MPU9250 implements PIDSource {
 	PIDSourceType type = PIDSourceType.kDisplacement;
 
+	public GyroWrapper() {
+		super();
+	}
+
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {
 		type = pidSource;

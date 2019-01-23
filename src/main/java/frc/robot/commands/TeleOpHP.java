@@ -12,13 +12,20 @@ import frc.robot.Robot;
 import frc.robot.subsystems.HPClaw;
 
 /**
- * Put description here.
+ * Tele-Op command that moves the claw to open and closed positions based on
+ * button on right Joystick.
  *
  * @author FRC Team 3389 TEC Tigers
+ * @see frc.robot.subsystems.HPClaw
  */
 public class TeleOpHP extends Command {
 	HPClaw claw;
 
+	/**
+	 * Constructor gains control of the HPClaw subsystem of the robot.
+	 * 
+	 * @see frc.robot.subsystems.HPClaw
+	 */
 	public TeleOpHP() {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.claw);
@@ -30,26 +37,35 @@ public class TeleOpHP extends Command {
 	protected void initialize() {
 	}
 
-	// Called repeatedly when this Command is scheduled to run
+	/**
+	 * When command is run, the claw is moved to open position.
+	 * 
+	 * @see frc.robot.subsystems.HPClaw
+	 */
 	@Override
 	protected void execute() {
 		claw.open();
 	}
 
-	// Make this return true when this Command no longer needs to run execute()
+	/**
+	 * Never allows claw command to finish on its own terms.
+	 */
 	@Override
 	protected boolean isFinished() {
 		return false;
 	}
 
-	// Called once after isFinished returns true
+	/**
+	 * Closes the claw if command is ended with isFinished
+	 */
 	@Override
 	protected void end() {
 		claw.close();
 	}
 
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
+	/**
+	 * Closes the claw if another command is run that needs it.
+	 */
 	@Override
 	protected void interrupted() {
 		end();

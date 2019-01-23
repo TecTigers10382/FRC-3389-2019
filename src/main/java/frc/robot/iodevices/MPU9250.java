@@ -646,7 +646,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 	private void calibrateSensors() {
 		// Robot.robotLogger.log(Logger.INFO, this, "Calibration starting in 3 seconds
 		// (don't move the sensor)");
-
+		System.out.println("Gyro Calibration Beginning...");
 		pause(3000); // let the MPU stabilize for 3 seconds
 
 		// we really should not be doing the logo here but it makes it easy and
@@ -689,6 +689,7 @@ public class MPU9250 extends I2CUpdatableAddress {
 		// OLEDBitmap.LOGO.getHeight(), 0, 0);
 
 		// Robot.robotLogger.log(Logger.INFO, this, "Calibration ended");
+		System.out.println("Gyro Calibration Finished!");
 	}
 
 	/**
