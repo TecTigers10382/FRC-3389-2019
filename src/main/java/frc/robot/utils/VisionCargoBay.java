@@ -160,10 +160,10 @@ public class VisionCargoBay {
 	 * @return Distance needed to be traveled in the y direction after the robot has
 	 *         rotated.
 	 */
-	public double distancY() {
+	public double distanceY() {
 		// Angle needed to be turned
 		double yaw = Math.atan(line.y / line.x);
-		// Rotation of axes
+		// Rotation of axes()
 		double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
 		return yPrimeC;
 	}
