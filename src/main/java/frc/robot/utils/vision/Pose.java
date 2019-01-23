@@ -7,69 +7,39 @@
 
 package frc.robot.utils.vision;
 
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
+
 /**
  * Holds a location in space.
  * 
  * @author FRC Team 3389 TEC Tigers
  */
 public class Pose {
-	public double x, y, z, alpha, beta, gamma;
+	public final double x, y, z, yaw, pitch, roll;
 
 	public Pose(double x, double y, double z, double alpha, double beta, double gamma) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.alpha = alpha;
-		this.beta = beta;
-		this.gamma = gamma;
+		this.yaw = alpha;
+		this.pitch = beta;
+		this.roll = gamma;
 	}
 
-	public double getX() {
-		return x;
+	public Pose() {
+		this(0, 0, 0, 0, 0, 0);
 	}
 
-	public void setX(double x) {
-		this.x = x;
+	public Pose setXYZ(Vector3d v) {
+		return new Pose(v.x, v.y, v.z, yaw, pitch, roll);
 	}
 
-	public double getY() {
-		return y;
+	public Pose changeOrigin(Point3d p) {
+		return new Pose(x - p.x, y - p.y, z - p.z, yaw, pitch, roll);
 	}
 
-	public void setY(double y) {
-		this.y = y;
+	public Point3d getPoint() {
+		return new Point3d(x, y, z);
 	}
-
-	public double getZ() {
-		return z;
-	}
-
-	public void setZ(double z) {
-		this.z = z;
-	}
-
-	public double getAlpha() {
-		return alpha;
-	}
-
-	public void setAlpha(double alpha) {
-		this.alpha = alpha;
-	}
-
-	public double getBeta() {
-		return beta;
-	}
-
-	public void setBeta(double beta) {
-		this.beta = beta;
-	}
-
-	public double getGamma() {
-		return gamma;
-	}
-
-	public void setGamma(double gamma) {
-		this.gamma = gamma;
-	}
-
 }
