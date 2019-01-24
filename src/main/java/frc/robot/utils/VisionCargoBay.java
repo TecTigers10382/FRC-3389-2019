@@ -82,7 +82,7 @@ public class VisionCargoBay {
 
 		// Checks that the camera has actually found the target.
 		if (centerX.length >= 2) {
-			double cXLeft, cXRight, cY;
+			double cXLeft, cXRight, cYLeft, cYRight;
 			// Checks that there isn't too many targets, and hopefully in the future will
 			// find the middle target and approach that one.
 			if (centerX.length > 2) {
@@ -90,36 +90,41 @@ public class VisionCargoBay {
 				// TODO find way to only get center target so it's not just erroring.
 				cXLeft = 0;
 				cXRight = 0;
-				cY = 0;
+				cYLeft = 0;
+				cYRight = 0;
 			} else {
 				// Makes sure the left side is on the left.
 				if (centerX[1] > centerX[0]) {
 					cXLeft = centerX[0];
+					cYLeft = centerY[0];
 					cXRight = centerX[1];
+					cYRight = centerY[1];
 				} else {
 					cXLeft = centerX[1];
+					cYLeft = centerY[1];
 					cXRight = centerX[0];
+					cYRight = centerY[0];
 				}
-				// (As long as there is no roll) the targets should have the same Y coordinate.
-				// Since we have two might as well take the average to make sure the Y is as
-				// close as possible.
-				cY = (centerY[0] + centerY[1]) / 2;
 			}
 			// Gives angle in radians relative to center y line, left is negative
 			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
 			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitch = Math.atan((cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
+			double pitchLeft = Math.atan((cYLeft - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
+			double pitchRight = Math.atan((cYRight - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
 
 			// Rotate target angles to robot's reference frame
 			yawLeft = yawLeft + cameraLocation.yaw;
 			yawRight = yawRight + cameraLocation.yaw;
-			pitch = pitch + cameraLocation.pitch;
+			pitchLeft = pitchLeft + cameraLocation.pitch;
+			pitchRight = pitchRight + cameraLocation.pitch;
 
 			// Using some trig (see MAGIC), converts the pitch and yaw to unit vectors in
 			// the direction of the target for each side.
-			targetL.set(Math.sin(yawLeft) * Math.cos(pitch), Math.cos(yawLeft) * Math.cos(pitch), Math.sin(pitch));
-			targetR.set(Math.sin(yawRight) * Math.cos(pitch), Math.cos(yawRight) * Math.cos(pitch), Math.sin(pitch));
+			targetL.set(Math.sin(yawLeft) * Math.cos(pitchLeft), Math.cos(yawLeft) * Math.cos(pitchLeft),
+					Math.sin(pitchLeft));
+			targetR.set(Math.sin(yawRight) * Math.cos(pitchRight), Math.cos(yawRight) * Math.cos(pitchRight),
+					Math.sin(pitchRight));
 
 			// ***JUST*** in case they aren't actually unit vectors (which is impossible),
 			// normalizes vectors.
