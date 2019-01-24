@@ -87,11 +87,33 @@ public class VisionCargoBay {
 			// find the middle target and approach that one.
 			if (centerX.length > 2) {
 				System.out.println("Woah nelly there's a lot of targets here!");
-				// TODO find way to only get center target so it's not just erroring.
-				cXLeft = 0;
-				cXRight = 0;
-				cYLeft = 0;
-				cYRight = 0;
+				// TODO check that this heuristic works.
+				int middleXID = 0;
+				for (int i = 0; i < centerX.length; i++) {
+					if (Math.abs(centerX[middleXID] - IMAGE_WIDTH / 2) > Math.abs(centerX[i] - IMAGE_WIDTH / 2)) {
+						middleXID = i;
+					}
+				}
+				int nextID = 0;
+				if (middleXID == 0)
+					nextID = 1;
+				for (int i = 0; i < centerX.length; i++) {
+					if (i != middleXID && Math.abs(centerX[nextID] - centerX[middleXID]) > Math
+							.abs(centerX[i] - centerX[middleXID])) {
+						nextID = i;
+					}
+				}
+				if (centerX[nextID] > centerX[middleXID]) {
+					cXLeft = centerX[middleXID];
+					cYLeft = centerY[middleXID];
+					cXRight = centerX[nextID];
+					cYRight = centerY[nextID];
+				} else {
+					cXLeft = centerX[nextID];
+					cYLeft = centerY[nextID];
+					cXRight = centerX[middleXID];
+					cYRight = centerY[middleXID];
+				}
 			} else {
 				// Makes sure the left side is on the left.
 				if (centerX[1] > centerX[0]) {
