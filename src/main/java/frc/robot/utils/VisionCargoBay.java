@@ -226,6 +226,22 @@ public class VisionCargoBay {
 	}
 
 	/**
+	 * @return Distance needed to be traveled in the y direction according to
+	 *         ultrasonic sensor.
+	 */
+	public double ultraDistanceY() {
+		return targetCUltraSonic.y;
+	}
+
+	/**
+	 * @return Distance needed to be traveled in the y direction according to
+	 *         ultrasonic sensor and vision.
+	 */
+	public double ultraDistanceX() {
+		return targetCUltraSonic.x;
+	}
+
+	/**
 	 * Emprical value found by measuring the percent error when travelling fowards.
 	 * 
 	 * Example: Drive 36in and measure real value. a_x = real value/36in. Find the

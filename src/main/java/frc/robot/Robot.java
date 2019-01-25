@@ -183,11 +183,10 @@ public class Robot extends TimedRobot {
 
 		bay.processData();
 
-		SmartDashboard.putNumber("Distance XY", bay.getDistanceXY());
 		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());
 		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
-		SmartDashboard.putNumber("Distance X", bay.distanceX());
-		SmartDashboard.putNumber("Distance Y", bay.distanceY());
+		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY());
+		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX());
 
 		SmartDashboard.putNumber("FL Displacement",
 				bay.mecanumPath(bay.distanceX(), bay.distanceY(), bay.yawDegrees())[0]);
