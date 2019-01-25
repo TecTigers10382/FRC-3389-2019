@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Preferences;
@@ -57,7 +56,7 @@ public class Robot extends TimedRobot {
 	public static NetworkTable bayReport;
 	public static VisionCargoBay bay;
 
-	public static AnalogUltraSonic ultra = new AnalogUltraSonic();
+	public static AnalogUltraSonic ultra = new AnalogUltraSonic(RobotMap.ULTRA_INPUT);
 
 	public static OLEDDisplay robotScreen;
 

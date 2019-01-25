@@ -10,7 +10,6 @@ package frc.robot.iodevices;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
@@ -19,8 +18,8 @@ public class AnalogUltraSonic implements PIDSource {
 	AnalogInput ultra;
 	PIDSourceType sourceType = PIDSourceType.kDisplacement;
 
-	public AnalogUltraSonic() {
-		ultra = new AnalogInput(RobotMap.ULTRA_INPUT);
+	public AnalogUltraSonic(int port) {
+		ultra = new AnalogInput(port);
 	}
 
 	public double getDistanceInches() {
