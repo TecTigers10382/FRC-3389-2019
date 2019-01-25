@@ -34,7 +34,7 @@ public class VisionCargoBay {
 
 	final double CAMERA_X = 0;
 	final double CAMERA_Y = 0;
-	final double CAMERA_Z = 10 + 6 / 8;
+	final double CAMERA_Z = 10 + 6.0 / 8.0;
 	final double CAMERA_YAW = 0;
 	final double CAMERA_PITCH = Math.toRadians(20);
 	// Please do not roll the camera I don't account for it.
