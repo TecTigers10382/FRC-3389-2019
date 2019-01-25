@@ -80,11 +80,12 @@ public class Robot extends TimedRobot {
 		}
 
 		// Starts streaming camera to driver station and gets results from GRIP
-		camera = CameraServer.getInstance().startAutomaticCapture();
-		camera.setBrightness(0);
-		camera.setExposureManual(0);
-		camera.setFPS(10);
-		camera.setWhiteBalanceManual(0);
+		// camera = CameraServer.getInstance().startAutomaticCapture();
+		// camera.setResolution(720, 480);
+		// camera.setBrightness(0);
+		// camera.setExposureManual(20);
+		// camera.setFPS(10);
+		// camera.setWhiteBalanceManual(0);
 
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 
@@ -177,13 +178,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-	}
 
-	/**
-	 * This function is called periodically during test mode.
-	 */
-	@Override
-	public void testPeriodic() {
 		bay.processData();
 
 		SmartDashboard.putNumber("Distance XY", bay.getDistanceXY());
@@ -194,5 +189,13 @@ public class Robot extends TimedRobot {
 
 		SmartDashboard.putNumber("FL Displacement",
 				bay.mecanumPath(bay.distanceX(), bay.distanceY(), bay.yawDegrees())[0]);
+	}
+
+	/**
+	 * This function is called periodically during test mode.
+	 */
+	@Override
+	public void testPeriodic() {
+
 	}
 }
