@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CameraTurn;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.iodevices.AnalogUltraSonic;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -55,6 +56,8 @@ public class Robot extends TimedRobot {
 
 	public static NetworkTable bayReport;
 	public static VisionCargoBay bay;
+
+	public static AnalogUltraSonic ultra = new AnalogUltraSonic();
 
 	public static OLEDDisplay robotScreen;
 

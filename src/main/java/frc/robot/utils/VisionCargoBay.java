@@ -11,6 +11,7 @@ import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.drive.Vector2d;
+import frc.robot.Robot;
 import frc.robot.utils.vision.Pose;
 
 /**
@@ -78,8 +79,7 @@ public class VisionCargoBay {
 	 * @return distance the camera is from the target.
 	 */
 	private double getUltraDistance() {
-		// TODO add ultrasonic sensor.
-		return 0;
+		return Robot.ultra.pidGet();
 	}
 
 	/**

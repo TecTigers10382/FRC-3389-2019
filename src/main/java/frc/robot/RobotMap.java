@@ -39,6 +39,8 @@ public class RobotMap {
 
 	public static final int POT_INPUT = 3;
 
+	public static final int ULTRA_INPUT = 4;
+
 	/**
 	 * Amount of deadzone on the sticks of the joysticks.
 	 */
