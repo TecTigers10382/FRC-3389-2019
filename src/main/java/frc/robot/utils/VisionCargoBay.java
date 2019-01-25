@@ -10,6 +10,7 @@ package frc.robot.utils;
 import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.drive.Vector2d;
 import frc.robot.utils.vision.Pose;
 
 /**
@@ -53,6 +54,7 @@ public class VisionCargoBay {
 	 * Stores target location relative to robot.
 	 */
 	Vector3d targetL, targetR, targetC;
+	Vector2d targetCUltraSonic;
 
 	/**
 	 * Stores a vector from the left side of the target to the right.
@@ -68,7 +70,16 @@ public class VisionCargoBay {
 		targetL = new Vector3d();
 		targetR = new Vector3d();
 		targetC = new Vector3d();
+		targetCUltraSonic = new Vector2d();
 		line = new Vector3d();
+	}
+
+	/**
+	 * @return distance the camera is from the target.
+	 */
+	private double getUltraDistance() {
+		// TODO add ultrasonic sensor.
+		return 0;
 	}
 
 	/**
@@ -118,6 +129,12 @@ public class VisionCargoBay {
 			yawRight = yawRight + cameraLocation.yaw;
 			pitchLeft = pitchLeft + cameraLocation.pitch;
 			pitchRight = pitchRight + cameraLocation.pitch;
+
+			// Uses an ultrasonic sensor to estimate the x and y location of the target
+			// relative to robot.
+			double yawMiddle = (yawLeft + yawRight) / 2;
+			targetCUltraSonic.x = getUltraDistance() * Math.tan(yawMiddle) + cameraLocation.x;
+			targetCUltraSonic.y = getUltraDistance() + cameraLocation.y;
 
 			// Using some trig (see MAGIC), converts the pitch and yaw to unit vectors in
 			// the direction of the target for each side.
