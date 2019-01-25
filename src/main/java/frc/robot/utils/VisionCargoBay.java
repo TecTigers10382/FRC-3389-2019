@@ -11,6 +11,7 @@ import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.drive.Vector2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.utils.vision.Pose;
 
@@ -29,14 +30,16 @@ public class VisionCargoBay {
 	final int IMAGE_HEIGHT = 400;
 	// camera FOV in degrees.
 	final double FOV_H = 67;
+	final double FOV_V = 45;
 	// Uses FOV to find the focal length of the camera.
-	final double FOCAL_LENGTH = IMAGE_WIDTH / (2 * Math.atan(Math.toRadians(FOV_H) / 2));
+	final double FOCAL_LENGTH_H = IMAGE_WIDTH / (2 * Math.atan(Math.toRadians(FOV_H) / 2));
+	final double FOCAL_LENGTH_V = IMAGE_HEIGHT / (2 * Math.atan(Math.toRadians(FOV_V) / 2));
 
 	final double CAMERA_X = 0;
 	final double CAMERA_Y = 0;
 	final double CAMERA_Z = 10 + 6.0 / 8.0;
 	final double CAMERA_YAW = 0;
-	final double CAMERA_PITCH = Math.toRadians(20);
+	final double CAMERA_PITCH = Math.toRadians(45);
 	// Please do not roll the camera I don't account for it.
 	// If you want to, figure out the math for me please.
 	final double CAMERA_ROLL = 0;
@@ -118,11 +121,13 @@ public class VisionCargoBay {
 				}
 			}
 			// Gives angle in radians relative to center y line, left is negative
-			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
-			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH);
+			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
+			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitchLeft = Math.atan((cYLeft - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
-			double pitchRight = Math.atan((cYRight - IMAGE_HEIGHT / 2) / FOCAL_LENGTH);
+			double pitchLeft = Math.atan((cYLeft - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
+			double pitchRight = Math.atan((cYRight - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
+			SmartDashboard.putNumber("Pleft", pitchLeft);
+			SmartDashboard.putNumber("Pright", pitchRight);
 
 			// Rotate target angles to robot's reference frame
 			yawLeft = yawLeft + cameraLocation.yaw;
