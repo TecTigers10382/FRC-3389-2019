@@ -23,18 +23,18 @@ public class VisionCargoBay {
 
 	NetworkTable input;
 
-	final int IMAGE_WIDTH = 128;
-	final int IMAGE_HEIGHT = 64;
+	final int IMAGE_WIDTH = 640;
+	final int IMAGE_HEIGHT = 400;
 	// camera FOV in degrees.
-	final double FOV_H = 61;
+	final double FOV_H = 67;
 	// Uses FOV to find the focal length of the camera.
 	final double FOCAL_LENGTH = IMAGE_WIDTH / (2 * Math.atan(Math.toRadians(FOV_H) / 2));
 
 	final double CAMERA_X = 0;
 	final double CAMERA_Y = 0;
-	final double CAMERA_Z = 0;
+	final double CAMERA_Z = 10 + 6 / 8;
 	final double CAMERA_YAW = 0;
-	final double CAMERA_PITCH = 0;
+	final double CAMERA_PITCH = Math.toRadians(20);
 	// Please do not roll the camera I don't account for it.
 	// If you want to, figure out the math for me please.
 	final double CAMERA_ROLL = 0;
@@ -42,7 +42,7 @@ public class VisionCargoBay {
 	/**
 	 * Height of target center in inches measured from the ground.
 	 */
-	final double TARGET_HEIGHT = 3 * 12 + 3 + 1.0 / 8.0 - 5.5 / 2.0;
+	final double TARGET_HEIGHT = 3 * 12;
 
 	/**
 	 * Stores camera location relative to robot.
