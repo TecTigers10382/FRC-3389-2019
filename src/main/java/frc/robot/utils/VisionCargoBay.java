@@ -203,7 +203,7 @@ public class VisionCargoBay {
 	 *         positive.
 	 */
 	public double rawDegrees() {
-		return Math.toDegrees(Math.atan(targetC.y / targetC.x));
+		return Math.toDegrees(Math.atan(targetC.x / targetC.y));
 	}
 
 	/**
