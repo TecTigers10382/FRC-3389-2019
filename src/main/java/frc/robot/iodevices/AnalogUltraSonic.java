@@ -17,13 +17,14 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class AnalogUltraSonic implements PIDSource {
 	AnalogInput ultra;
 	PIDSourceType sourceType = PIDSourceType.kDisplacement;
+	double conversionFactor = 20.0 / .4907;
 
 	public AnalogUltraSonic(int port) {
 		ultra = new AnalogInput(port);
 	}
 
 	public double getDistanceInches() {
-		return ultra.getAverageVoltage() * 5.0;
+		return ultra.getAverageVoltage() * conversionFactor;
 	}
 
 	@Override
