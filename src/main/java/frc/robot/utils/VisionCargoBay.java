@@ -60,7 +60,7 @@ public class VisionCargoBay {
 	/**
 	 * Stores a vector from the left side of the target to the right.
 	 */
-	Vector3d line;
+	Vector3d targetLine;
 
 	/**
 	 * @param table A network table that contains a contour report.
@@ -72,7 +72,7 @@ public class VisionCargoBay {
 		targetR = new Vector3d();
 		targetC = new Vector3d();
 		targetCUltraSonic = new Vector2d();
-		line = new Vector3d();
+		targetLine = new Vector3d();
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class VisionCargoBay {
 			// By having the point of the left and right side we have a line segment in
 			// space of the target.
 			// Store projection of the vector from left to right on XY plane.
-			line.set(targetR.x - targetL.x, targetR.y - targetL.y, 0);
+			targetLine.set(targetR.x - targetL.x, targetR.y - targetL.y, 0);
 		} else {
 			System.out.println("ERROR Camera failed to find any targets");
 		}
@@ -190,7 +190,7 @@ public class VisionCargoBay {
 	 *         target face. CCW is positive.
 	 */
 	public double yawDegrees() {
-		return Math.toDegrees(Math.atan(line.y / line.x));
+		return Math.toDegrees(Math.atan(targetLine.y / targetLine.x));
 	}
 
 	/**
@@ -207,7 +207,7 @@ public class VisionCargoBay {
 	 */
 	public double distanceX() {
 		// Angle needed to be turned
-		double yaw = Math.atan(line.y / line.x);
+		double yaw = Math.atan(targetLine.y / targetLine.x);
 		// Rotation of axes
 		double xPrimeC = targetC.x * Math.cos(yaw) + targetC.y * Math.sin(yaw);
 		return xPrimeC;
@@ -219,7 +219,7 @@ public class VisionCargoBay {
 	 */
 	public double distanceY() {
 		// Angle needed to be turned
-		double yaw = Math.atan(line.y / line.x);
+		double yaw = Math.atan(targetLine.y / targetLine.x);
 		// Rotation of axes()
 		double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
 		return yPrimeC;
@@ -230,7 +230,7 @@ public class VisionCargoBay {
 	 *         ultrasonic sensor.
 	 */
 	public double ultraDistanceY() {
-		return targetCUltraSonic.y;
+		return getUltraDistance();
 	}
 
 	/**
