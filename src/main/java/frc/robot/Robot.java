@@ -54,6 +54,8 @@ public class Robot extends TimedRobot {
 	public static NetworkTable lines;
 
 	public static NetworkTable bayReport;
+	public static NetworkTable leftLineReport;
+	public static NetworkTable rightLineReport;
 	public static VisionCargoBay bay;
 
 	public static AnalogUltraSonic ultra = new AnalogUltraSonic(RobotMap.ULTRA_INPUT);
@@ -92,7 +94,9 @@ public class Robot extends TimedRobot {
 		lines = NetworkTableInstance.getDefault().getTable("GRIP/lineReport");
 
 		bayReport = NetworkTableInstance.getDefault().getTable("GRIP/bayReport");
-		bay = new VisionCargoBay(bayReport);
+		leftLineReport = NetworkTableInstance.getDefault().getTable("GRIP/leftLineReport");
+		rightLineReport = NetworkTableInstance.getDefault().getTable("GRIP/rightLineReport");
+		bay = new VisionCargoBay(bayReport, leftLineReport, rightLineReport);
 
 		robotScreen = new OLEDDisplay();
 

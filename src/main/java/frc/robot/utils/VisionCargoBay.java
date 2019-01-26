@@ -7,6 +7,13 @@
 
 package frc.robot.utils;
 
+import java.awt.LinearGradientPaint;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import javax.lang.model.util.ElementScanner6;
 import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -14,6 +21,8 @@ import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.utils.vision.Pose;
+import frc.robot.utils.vision.VisionTarget;
+import frc.robot.utils.vision.VisionTarget.TargetType;
 
 /**
  * Uses network table output from GRIP and converts it into robot coordinates
@@ -24,7 +33,7 @@ import frc.robot.utils.vision.Pose;
 public class VisionCargoBay {
 	// All units are in inches and radians unless otherwise noted.
 
-	NetworkTable input;
+	NetworkTable contourInput, leftLineInput, rightLineInput;
 
 	final int IMAGE_WIDTH = 640;
 	final int IMAGE_HEIGHT = 400;
@@ -68,8 +77,10 @@ public class VisionCargoBay {
 	/**
 	 * @param table A network table that contains a contour report.
 	 */
-	public VisionCargoBay(NetworkTable table) {
-		input = table;
+	public VisionCargoBay(NetworkTable contour, NetworkTable leftLine, NetworkTable rightLine) {
+		contourInput = contour;
+		leftLineInput = leftLine;
+		rightLineInput = rightLine;
 		cameraLocation = new Pose(CAMERA_X, CAMERA_Y, CAMERA_Z, CAMERA_YAW, CAMERA_PITCH, CAMERA_ROLL);
 		targetL = new Vector3d();
 		targetR = new Vector3d();
@@ -91,41 +102,110 @@ public class VisionCargoBay {
 	 */
 	public void processData() {
 		double[] defaultValue = new double[0];
-		double[] centerX = input.getEntry("centerX").getDoubleArray(defaultValue);
-		double[] centerY = input.getEntry("centerY").getDoubleArray(defaultValue);
+		double[] centerX = contourInput.getEntry("centerX").getDoubleArray(defaultValue);
+		double[] centerY = contourInput.getEntry("centerY").getDoubleArray(defaultValue);
+		double[] area = contourInput.getEntry("area").getDoubleArray(defaultValue);
+		double[] width = contourInput.getEntry("width").getDoubleArray(defaultValue);
+		double[] height = contourInput.getEntry("height").getDoubleArray(defaultValue);
 
 		// Checks that the camera has actually found the target.
 		if (centerX.length >= 2) {
 			double cXLeft, cXRight, cYLeft, cYRight;
-			// Checks that there isn't too many targets, and hopefully in the future will
-			// find the middle target and approach that one.
-			if (centerX.length > 2) {
-				System.out.println("Woah nelly there's a lot of targets here!");
-				// TODO Write something to figure out the difference
-				cXLeft = 0;
-				cXRight = 0;
-				cYLeft = 0;
-				cYRight = 0;
+			VisionTarget left, right;
+			ArrayList<VisionTarget> targets = new ArrayList<>();
+			for (int i = 0; i < centerX.length; i++) {
+				targets.add(new VisionTarget(centerX[i], centerY[i], width[i], height[i], area[i]));
+			}
+
+			// Sort targets so leftmost is first.
+			Collections.sort(targets);
+
+			if (targets.size() == 2) {
+				left = targets.get(0);
+				right = targets.get(1);
 			} else {
-				// Makes sure the left side is on the left.
-				if (centerX[1] > centerX[0]) {
-					cXLeft = centerX[0];
-					cYLeft = centerY[0];
-					cXRight = centerX[1];
-					cYRight = centerY[1];
+				// Get all the values of left side target lines.
+				double[] x1Left = leftLineInput.getEntry("x1").getDoubleArray(defaultValue);
+				double[] y1Left = leftLineInput.getEntry("y1").getDoubleArray(defaultValue);
+				double[] x2Left = leftLineInput.getEntry("x2").getDoubleArray(defaultValue);
+				double[] y2Left = leftLineInput.getEntry("y2").getDoubleArray(defaultValue);
+
+				// Get all the values of right side target lines.
+				double[] x1Right = rightLineInput.getEntry("x1").getDoubleArray(defaultValue);
+				double[] y1Right = rightLineInput.getEntry("y1").getDoubleArray(defaultValue);
+				double[] x2Right = rightLineInput.getEntry("x2").getDoubleArray(defaultValue);
+				double[] y2Right = rightLineInput.getEntry("y2").getDoubleArray(defaultValue);
+
+				// Create array of left and right lines.
+				Line2D[] leftLines = new Line2D[x1Left.length];
+				Line2D[] rightLines = new Line2D[x1Left.length];
+				for (int i = 0; i < leftLines.length; i++)
+					leftLines[i] = new Line2D.Double(x1Left[i], y1Left[i], x2Left[i], y2Left[i]);
+				for (int i = 0; i < rightLines.length; i++)
+					rightLines[i] = new Line2D.Double(x1Right[i], y1Right[i], x2Right[i], y2Right[i]);
+
+				// Finds the type of each target using the lines.
+				for (VisionTarget t : targets) {
+					boolean l = false;
+					boolean r = false;
+
+					// Checks if there are left lines in the target.
+					for (Line2D line : leftLines) {
+						if (t.contains(line)) {
+							l = true;
+							break;
+						}
+					}
+
+					// Checks if there are right lines in the target.
+					for (Line2D line : rightLines) {
+						if (t.contains(line)) {
+							r = true;
+							break;
+						}
+					}
+
+					if (l && r)
+						System.out.println("ERROR target somehow is both left and right");
+					else if (l)
+						t.setType(TargetType.kLEFT);
+					else if (r)
+						t.setType(TargetType.kRIGHT);
+					else
+						System.out.println("WARNING target found that has no left or right lines");
+				}
+
+				int centerTID = 0;
+				VisionTarget centerTarget = targets.get(0);
+				VisionTarget t;
+				for (int i = 1; i < targets.size(); i++) {
+					t = targets.get(i);
+					if (Math.abs(t.cX - IMAGE_WIDTH / 2) < Math.abs(centerTarget.cX - IMAGE_WIDTH / 2)
+							&& t.getType() != TargetType.kNONE) {
+						centerTID = i;
+						centerTarget = t;
+					}
+				}
+
+				if (centerTarget.getType() == TargetType.kLEFT) {
+					left = centerTarget;
+					while (targets.get(++centerTID).getType() != TargetType.kRIGHT && centerTID <= targets.size())
+						;
+					right = targets.get(centerTID);
 				} else {
-					cXLeft = centerX[1];
-					cYLeft = centerY[1];
-					cXRight = centerX[0];
-					cYRight = centerY[0];
+					right = centerTarget;
+					while (targets.get(--centerTID).getType() != TargetType.kRIGHT && centerTID >= 0)
+						;
+					left = targets.get(centerTID);
 				}
 			}
+
 			// Gives angle in radians relative to center y line, left is negative
-			double yawLeft = Math.atan((cXLeft - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
-			double yawRight = Math.atan((cXRight - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
+			double yawLeft = Math.atan(((left.cX) - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
+			double yawRight = Math.atan((right.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitchLeft = Math.atan((cYLeft - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
-			double pitchRight = Math.atan((cYRight - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
+			double pitchLeft = Math.atan((left.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
+			double pitchRight = Math.atan((right.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
 			SmartDashboard.putNumber("Pleft", pitchLeft);
 			SmartDashboard.putNumber("Pright", pitchRight);
 
