@@ -8,7 +8,10 @@
 package frc.robot.utils.vision;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
+import frc.robot.Robot;
 
 /**
  * Holds a target found by vision processing.
@@ -16,6 +19,7 @@ import java.awt.geom.Rectangle2D;
  * @author FRC Team 3389 TEC Tigers
  */
 public class VisionTarget implements Comparable<VisionTarget> {
+	private final static double BUFFER = 5;
 	public double cX, cY, area, w, h;
 	Rectangle2D bound;
 	TargetType type = TargetType.kNONE;
@@ -35,7 +39,17 @@ public class VisionTarget implements Comparable<VisionTarget> {
 		w = width;
 		h = height;
 		this.area = area;
-		bound = new Rectangle2D.Double(cX - w / 2.0, cY - h / 2.0, w, h);
+		bound = new Rectangle2D.Double(cX - w / 2.0 - BUFFER, cY - h / 2.0 - BUFFER, w + 2 * BUFFER, h + 2 * BUFFER);
+	}
+
+	public VisionTarget(double centerX, double centerY, double width, double height, double area, TargetType type) {
+		cX = centerX;
+		cY = centerY;
+		w = width;
+		h = height;
+		this.area = area;
+		this.type = type;
+		bound = new Rectangle2D.Double(cX - w / 2.0 - BUFFER, cY - h / 2.0 - BUFFER, w + 2 * BUFFER, h + 2 * BUFFER);
 	}
 
 	/**
@@ -62,7 +76,7 @@ public class VisionTarget implements Comparable<VisionTarget> {
 	 * kNONE means it can't be determined what side it should be on. <br>
 	 */
 	public enum TargetType {
-		kLEFT, kRIGHT, kNONE;
+		kLEFT, kRIGHT, kNONE, kBOTH;
 	}
 
 	@Override
@@ -81,5 +95,14 @@ public class VisionTarget implements Comparable<VisionTarget> {
 	 */
 	public boolean contains(Line2D line) {
 		return bound.intersectsLine(line);
+	}
+
+	public String toString() {
+		return bound.toString() + ";\t" + type;
+	}
+
+	public VisionTarget undistort() {
+		Point2D un = Robot.bay.undistort(cX, cY);
+		return new VisionTarget(un.getX(), un.getY(), w, h, area, type);
 	}
 }

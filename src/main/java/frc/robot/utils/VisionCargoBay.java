@@ -7,13 +7,18 @@
 
 package frc.robot.utils;
 
+import java.awt.Point;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.drive.Vector2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -32,14 +37,20 @@ public class VisionCargoBay {
 
 	NetworkTable contourInput, leftLineInput, rightLineInput;
 
+	Map<Point2D, Point2D> distortion;
+
 	final int IMAGE_WIDTH = 640;
 	final int IMAGE_HEIGHT = 400;
 	// camera FOV in degrees.
 	final double FOV_H = 67;
 	final double FOV_V = 45;
 	// Uses FOV to find the focal length of the camera.
-	final double FOCAL_LENGTH_H = IMAGE_WIDTH / (2 * Math.atan(Math.toRadians(FOV_H) / 2));
-	final double FOCAL_LENGTH_V = IMAGE_HEIGHT / (2 * Math.atan(Math.toRadians(FOV_V) / 2));
+	// final double FOCAL_LENGTH_H = IMAGE_WIDTH / (2 *
+	// Math.atan(Math.toRadians(FOV_H) / 2));
+	// final double FOCAL_LENGTH_V = IMAGE_HEIGHT / (2 *
+	// Math.atan(Math.toRadians(FOV_V) / 2));
+	final double FOCAL_LENGTH_H = 569.2393;
+	final double FOCAL_LENGTH_V = 576.7241;
 
 	final double CAMERA_X = 0;
 	final double CAMERA_Y = 0;
@@ -84,6 +95,25 @@ public class VisionCargoBay {
 		targetC = new Vector3d();
 		targetCUltraSonic = new Vector2d();
 		targetLine = new Vector3d();
+		// distortion = generateMap();
+	}
+
+	public final double k1 = -0.3178, k2 = 0.1332, p1 = -1.7701 * Math.pow(10.0, -4.0),
+			p2 = -8.4050 * Math.pow(10.0, -4.0), cx = 321.7489, cy = 259.8865;
+
+	private HashMap<Point2D, Point2D> generateMap() {
+		HashMap<Point2D, Point2D> out = new HashMap<>();
+		for (int y = 0; y < IMAGE_HEIGHT; y++) {
+			for (int x = 0; x < IMAGE_WIDTH; x++) {
+				double r = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
+				double x_r = x * (1 + k1 * Math.pow(r, 2) + k2 * Math.pow(r, 4));
+				double y_r = y * (1 + k1 * Math.pow(r, 2) + k2 * Math.pow(r, 4));
+				out.put(new Point2D.Double(x, y),
+						new Point2D.Double(x_r + (2 * p1 * x_r * y_r + p2 * (Math.pow(r, 2) + 2 * Math.pow(x_r, 2))),
+								y_r + (p1 * (Math.pow(r, 2) + 2 * Math.pow(y_r, 2)) + 2 * p2 * x_r * y_r)));
+			}
+		}
+		return out;
 	}
 
 	/**
@@ -98,6 +128,7 @@ public class VisionCargoBay {
 	 * the robot.
 	 */
 	public void processData() {
+		NetworkTableInstance.getDefault().flush();
 		double[] defaultValue = new double[0];
 		double[] centerX = contourInput.getEntry("centerX").getDoubleArray(defaultValue);
 		double[] centerY = contourInput.getEntry("centerY").getDoubleArray(defaultValue);
@@ -120,88 +151,79 @@ public class VisionCargoBay {
 				left = targets.get(0);
 				right = targets.get(1);
 			} else {
-				// Get all the values of left side target lines.
-				double[] x1Left = leftLineInput.getEntry("x1").getDoubleArray(defaultValue);
-				double[] y1Left = leftLineInput.getEntry("y1").getDoubleArray(defaultValue);
-				double[] x2Left = leftLineInput.getEntry("x2").getDoubleArray(defaultValue);
-				double[] y2Left = leftLineInput.getEntry("y2").getDoubleArray(defaultValue);
-
-				// Get all the values of right side target lines.
-				double[] x1Right = rightLineInput.getEntry("x1").getDoubleArray(defaultValue);
-				double[] y1Right = rightLineInput.getEntry("y1").getDoubleArray(defaultValue);
-				double[] x2Right = rightLineInput.getEntry("x2").getDoubleArray(defaultValue);
-				double[] y2Right = rightLineInput.getEntry("y2").getDoubleArray(defaultValue);
-
-				// Create array of left and right lines.
-				Line2D[] leftLines = new Line2D[x1Left.length];
-				Line2D[] rightLines = new Line2D[x1Left.length];
-				for (int i = 0; i < leftLines.length; i++)
-					leftLines[i] = new Line2D.Double(x1Left[i], y1Left[i], x2Left[i], y2Left[i]);
-				for (int i = 0; i < rightLines.length; i++)
-					rightLines[i] = new Line2D.Double(x1Right[i], y1Right[i], x2Right[i], y2Right[i]);
-
-				// Finds the type of each target using the lines.
-				for (VisionTarget t : targets) {
-					boolean l = false;
-					boolean r = false;
-
-					// Checks if there are left lines in the target.
-					for (Line2D line : leftLines) {
-						if (t.contains(line)) {
-							l = true;
-							break;
-						}
-					}
-
-					// Checks if there are right lines in the target.
-					for (Line2D line : rightLines) {
-						if (t.contains(line)) {
-							r = true;
-							break;
-						}
-					}
-
-					if (l && r)
-						System.out.println("ERROR target somehow is both left and right");
-					else if (l)
-						t.setType(TargetType.kLEFT);
-					else if (r)
-						t.setType(TargetType.kRIGHT);
-					else
-						System.out.println("WARNING target found that has no left or right lines");
-				}
-
-				int centerTID = 0;
-				VisionTarget centerTarget = targets.get(0);
-				VisionTarget t;
-				for (int i = 1; i < targets.size(); i++) {
-					t = targets.get(i);
-					if (Math.abs(t.cX - IMAGE_WIDTH / 2) < Math.abs(centerTarget.cX - IMAGE_WIDTH / 2)
-							&& t.getType() != TargetType.kNONE) {
-						centerTID = i;
-						centerTarget = t;
-					}
-				}
-
-				if (centerTarget.getType() == TargetType.kLEFT) {
-					left = centerTarget;
-					while (targets.get(++centerTID).getType() != TargetType.kRIGHT && centerTID <= targets.size())
-						;
-					right = targets.get(centerTID);
-				} else {
-					right = centerTarget;
-					while (targets.get(--centerTID).getType() != TargetType.kRIGHT && centerTID >= 0)
-						;
-					left = targets.get(centerTID);
-				}
+				/*
+				 * // Get all the values of left side target lines. double[] x1Left =
+				 * leftLineInput.getEntry("x1").getDoubleArray(defaultValue); double[] y1Left =
+				 * leftLineInput.getEntry("y1").getDoubleArray(defaultValue); double[] x2Left =
+				 * leftLineInput.getEntry("x2").getDoubleArray(defaultValue); double[] y2Left =
+				 * leftLineInput.getEntry("y2").getDoubleArray(defaultValue);
+				 * 
+				 * // Get all the values of right side target lines. double[] x1Right =
+				 * rightLineInput.getEntry("x1").getDoubleArray(defaultValue); double[] y1Right
+				 * = rightLineInput.getEntry("y1").getDoubleArray(defaultValue); double[]
+				 * x2Right = rightLineInput.getEntry("x2").getDoubleArray(defaultValue);
+				 * double[] y2Right =
+				 * rightLineInput.getEntry("y2").getDoubleArray(defaultValue);
+				 * 
+				 * if (!(x1Left.length == x2Left.length && x2Left.length == y1Left.length &&
+				 * y1Left.length == y2Left.length && y2Left.length == x1Left.length)) {
+				 * processData(); return; } if (!(x1Right.length == x2Right.length &&
+				 * x2Right.length == y1Right.length && y1Right.length == y2Right.length &&
+				 * y2Right.length == x1Right.length)) { processData(); return; }
+				 * 
+				 * // Create array of left and right lines. Line2D[] leftLines = new
+				 * Line2D[x1Left.length]; Line2D[] rightLines = new Line2D[x1Right.length]; for
+				 * (int i = 0; i < leftLines.length; i++) leftLines[i] = new
+				 * Line2D.Double(x1Left[i], y1Left[i], x2Left[i], y2Left[i]); for (int i = 0; i
+				 * < rightLines.length; i++) rightLines[i] = new Line2D.Double(x1Right[i],
+				 * y1Right[i], x2Right[i], y2Right[i]);
+				 * 
+				 * int errors = 0; // Finds the type of each target using the lines. for
+				 * (VisionTarget t : targets) { boolean l = false; boolean r = false; // Checks
+				 * if there are left lines in the target. for (Line2D line : leftLines) { if
+				 * (t.contains(line)) { l = true; break; } }
+				 * 
+				 * // Checks if there are right lines in the target. for (Line2D line :
+				 * rightLines) {
+				 * 
+				 * System.out .println(line.getX1() + "," + line.getY1() + "\t" + line.getX2() +
+				 * "," + line.getY2()); if (t.contains(line)) { r = true; break; } }
+				 * 
+				 * if (l && r) {
+				 * System.out.println("ERROR target somehow is both left and right");
+				 * t.setType(TargetType.kBOTH); } else if (l) t.setType(TargetType.kLEFT); else
+				 * if (r) t.setType(TargetType.kRIGHT); else { errors++;
+				 * System.out.println("WARNING " + errors +
+				 * " target found that has no left or right lines"); }
+				 * 
+				 * System.out.println(t); }
+				 * 
+				 * int centerTID = 0; VisionTarget centerTarget = targets.get(0); VisionTarget
+				 * t; for (int i = 1; i < targets.size(); i++) { t = targets.get(i); if
+				 * (Math.abs(t.cX - cx) < Math.abs(centerTarget.cX - cx) && t.getType() !=
+				 * TargetType.kNONE) { centerTID = i; centerTarget = t; } }
+				 * 
+				 * if (centerTarget.getType() == TargetType.kLEFT) { left = centerTarget; if
+				 * (centerTID < targets.size()) while (centerTID < targets.size() - 1 &&
+				 * targets.get(++centerTID).getType() == TargetType.kNONE) ; right =
+				 * targets.get(centerTID); } else { right = centerTarget; if (centerTID > 0)
+				 * while (targets.get(--centerTID).getType() == TargetType.kNONE && centerTID >=
+				 * 0) ; left = targets.get(centerTID); }
+				 */
+				left = targets.get(0);
+				right = targets.get(1);
 			}
+			// left = left.undistort();
+			// right = right.undistort();
+
+			System.out.println(left + "\n" + right);
 
 			// Gives angle in radians relative to center y line, left is negative
-			double yawLeft = Math.atan(((left.cX) - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
-			double yawRight = Math.atan((right.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_H);
+			double yawLeft = Math.atan(((left.cX) - cx) / FOCAL_LENGTH_H);
+			double yawRight = Math.atan((right.cX - cx) / FOCAL_LENGTH_H);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitchLeft = Math.atan((left.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
-			double pitchRight = Math.atan((right.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_V);
+			double pitchLeft = Math.atan((left.cY - cy) / FOCAL_LENGTH_V);
+			double pitchRight = Math.atan((right.cY - cy) / FOCAL_LENGTH_V);
 			SmartDashboard.putNumber("Pleft", pitchLeft);
 			SmartDashboard.putNumber("Pright", pitchRight);
 
@@ -294,6 +316,15 @@ public class VisionCargoBay {
 		return xPrimeC;
 	}
 
+	public Point2D undistort(double x, double y) {
+		double r2 = Math.pow(x - cx, 2) + Math.pow(y - cy, 2);
+		double x_f = x + (x - cx) * (k1 * r2 + k2 * Math.pow(r2, 2))
+				+ ((p1 * (r2 + 2 * Math.pow(x - cx, 2)) + 2 * p2 * (x - cx) * (y - cy)));
+		double y_f = y + (y - cy) * (k1 * r2 + k2 * Math.pow(r2, 2)) + 2 * p1 * (x - cx) * (y - cy)
+				+ p2 * (r2 + 2 * Math.pow(y - cy, 2));
+		return new Point2D.Double(x_f, y_f);
+	}
+
 	/**
 	 * @return Distance needed to be traveled in the y direction after the robot has
 	 *         rotated.
@@ -314,12 +345,15 @@ public class VisionCargoBay {
 		return getUltraDistance();
 	}
 
+	// private final double xConversionFactor = 5.0 / (3.0 - .125);
+	private final double xConversionFactor = 1;
+
 	/**
 	 * @return Distance needed to be traveled in the y direction according to
 	 *         ultrasonic sensor and vision.
 	 */
 	public double ultraDistanceX() {
-		return targetCUltraSonic.x;
+		return targetCUltraSonic.x * xConversionFactor;
 	}
 
 	/**
