@@ -75,6 +75,12 @@ public class VisionTarget implements Comparable<VisionTarget> {
 		return (int) (this.cX - other.cX);
 	}
 
+	/**
+	 * Check if a line segment is within the target.
+	 * 
+	 * @param line A line segment in 2D space.
+	 * @return true if any part of the line segment is in the target.
+	 */
 	public boolean contains(Line2D line) {
 		return bound.intersectsLine(line);
 	}
