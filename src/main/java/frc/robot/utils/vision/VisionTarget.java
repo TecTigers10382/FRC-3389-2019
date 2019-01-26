@@ -7,9 +7,10 @@
 
 package frc.robot.utils.vision;
 
-import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+
+import frc.robot.utils.VisionCargoBay;
 
 /**
  * Holds a target found by vision processing.
@@ -21,6 +22,15 @@ public class VisionTarget implements Comparable<VisionTarget> {
 	Rectangle2D bound;
 	TargetType type = TargetType.kNONE;
 
+	/**
+	 * Holds a contour target found by the camera.
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 * @param width
+	 * @param height
+	 * @param area
+	 */
 	public VisionTarget(double centerX, double centerY, double width, double height, double area) {
 		cX = centerX;
 		cY = centerY;
@@ -30,14 +40,29 @@ public class VisionTarget implements Comparable<VisionTarget> {
 		bound = new Rectangle2D.Double(cX - w / 2.0, cY - h / 2.0, w, h);
 	}
 
+	/**
+	 * @param t Type to set the target to.
+	 * @see VisionTarget.TargetType
+	 */
 	public void setType(TargetType t) {
 		type = t;
 	}
 
+	/**
+	 * @return Type of target.
+	 * @see VisionTarget.TargetType
+	 */
 	public TargetType getType() {
 		return type;
 	}
 
+	/**
+	 * The different target types:
+	 * 
+	 * kLEFT means it should be on left side of bay. <br>
+	 * kRIGHT means it should be on right side of bay. <br>
+	 * kNONE means it can't be determined what side it should be on. <br>
+	 */
 	public enum TargetType {
 		kLEFT, kRIGHT, kNONE;
 	}
