@@ -7,13 +7,10 @@
 
 package frc.robot.utils;
 
-import java.awt.LinearGradientPaint;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
-import javax.lang.model.util.ElementScanner6;
 import javax.vecmath.Vector3d;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -110,7 +107,6 @@ public class VisionCargoBay {
 
 		// Checks that the camera has actually found the target.
 		if (centerX.length >= 2) {
-			double cXLeft, cXRight, cYLeft, cYRight;
 			VisionTarget left, right;
 			ArrayList<VisionTarget> targets = new ArrayList<>();
 			for (int i = 0; i < centerX.length; i++) {

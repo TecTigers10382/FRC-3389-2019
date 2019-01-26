@@ -10,8 +10,6 @@ package frc.robot.utils.vision;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import frc.robot.utils.VisionCargoBay;
-
 /**
  * Holds a target found by vision processing.
  * 
