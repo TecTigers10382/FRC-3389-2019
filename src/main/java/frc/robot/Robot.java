@@ -8,8 +8,12 @@
 package frc.robot;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.networktables.TableEntryListener;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -57,6 +61,7 @@ public class Robot extends TimedRobot {
 	public static NetworkTable leftLineReport;
 	public static NetworkTable rightLineReport;
 	public static VisionCargoBay bay;
+	public static int bayListener;
 
 	public static AnalogUltraSonic ultra = new AnalogUltraSonic(RobotMap.ULTRA_INPUT);
 
@@ -101,6 +106,14 @@ public class Robot extends TimedRobot {
 		robotScreen = new OLEDDisplay();
 
 		prefs = Preferences.getInstance();
+
+		bayListener = bayReport.addEntryListener("height", new TableEntryListener() {
+			@Override
+			public void valueChanged(NetworkTable table, String key, NetworkTableEntry entry, NetworkTableValue value,
+					int flags) {
+				bay.processData();
+			}
+		}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 	}
 
 	/**
@@ -184,8 +197,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-
-		bay.processData();
 
 		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());
 		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
