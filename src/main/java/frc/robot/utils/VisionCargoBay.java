@@ -7,13 +7,9 @@
 
 package frc.robot.utils;
 
-import java.awt.Point;
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.vecmath.Vector3d;
 
@@ -24,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.utils.vision.Pose;
 import frc.robot.utils.vision.VisionTarget;
-import frc.robot.utils.vision.VisionTarget.TargetType;
 
 /**
  * Uses network table output from GRIP and converts it into robot coordinates
@@ -37,20 +32,20 @@ public class VisionCargoBay {
 
 	NetworkTable contourInput, leftLineInput, rightLineInput;
 
-	Map<Point2D, Point2D> distortion;
-
 	final int IMAGE_WIDTH = 640;
 	final int IMAGE_HEIGHT = 400;
 	// camera FOV in degrees.
 	final double FOV_H = 67;
 	final double FOV_V = 45;
 	// Uses FOV to find the focal length of the camera.
-	// final double FOCAL_LENGTH_H = IMAGE_WIDTH / (2 *
+	// final double FOCAL_LENGTH_X = IMAGE_WIDTH / (2 *
 	// Math.atan(Math.toRadians(FOV_H) / 2));
-	// final double FOCAL_LENGTH_V = IMAGE_HEIGHT / (2 *
+	// final double FOCAL_LENGTH_Y = IMAGE_HEIGHT / (2 *
 	// Math.atan(Math.toRadians(FOV_V) / 2));
-	final double FOCAL_LENGTH_H = 569.2393;
-	final double FOCAL_LENGTH_V = 576.7241;
+
+	// Focal Lengths calculated from MATLAB
+	final double FOCAL_LENGTH_X = 569.2393;
+	final double FOCAL_LENGTH_Y = 576.7241;
 
 	final double CAMERA_X = 0;
 	final double CAMERA_Y = 0;
@@ -60,6 +55,13 @@ public class VisionCargoBay {
 	// Please do not roll the camera I don't account for it.
 	// If you want to, figure out the math for me please.
 	final double CAMERA_ROLL = 0;
+
+	// Camera Parameters for Distortion from MATLAB
+	final double PRINCIPAL_POINT_X = 323.1647;
+	final double PRINCIPAL_POINT_Y = 258.3681;
+	// Note: these are negative what comes out of MATLAB
+	final double k1 = 0.3173;
+	final double k2 = -0.1322;
 
 	/**
 	 * Height of target center in inches measured from the ground.
@@ -95,25 +97,6 @@ public class VisionCargoBay {
 		targetC = new Vector3d();
 		targetCUltraSonic = new Vector2d();
 		targetLine = new Vector3d();
-		// distortion = generateMap();
-	}
-
-	public final double k1 = -0.3178, k2 = 0.1332, p1 = -1.7701 * Math.pow(10.0, -4.0),
-			p2 = -8.4050 * Math.pow(10.0, -4.0), cx = 321.7489, cy = 259.8865;
-
-	private HashMap<Point2D, Point2D> generateMap() {
-		HashMap<Point2D, Point2D> out = new HashMap<>();
-		for (int y = 0; y < IMAGE_HEIGHT; y++) {
-			for (int x = 0; x < IMAGE_WIDTH; x++) {
-				double r = Math.sqrt(Math.pow(x - cx, 2) + Math.pow(y - cy, 2));
-				double x_r = x * (1 + k1 * Math.pow(r, 2) + k2 * Math.pow(r, 4));
-				double y_r = y * (1 + k1 * Math.pow(r, 2) + k2 * Math.pow(r, 4));
-				out.put(new Point2D.Double(x, y),
-						new Point2D.Double(x_r + (2 * p1 * x_r * y_r + p2 * (Math.pow(r, 2) + 2 * Math.pow(x_r, 2))),
-								y_r + (p1 * (Math.pow(r, 2) + 2 * Math.pow(y_r, 2)) + 2 * p2 * x_r * y_r)));
-			}
-		}
-		return out;
 	}
 
 	/**
@@ -213,17 +196,17 @@ public class VisionCargoBay {
 				left = targets.get(0);
 				right = targets.get(1);
 			}
-			// left = left.undistort();
-			// right = right.undistort();
+			left = left.undistort();
+			right = right.undistort();
 
 			System.out.println(left + "\n" + right);
 
 			// Gives angle in radians relative to center y line, left is negative
-			double yawLeft = Math.atan(((left.cX) - cx) / FOCAL_LENGTH_H);
-			double yawRight = Math.atan((right.cX - cx) / FOCAL_LENGTH_H);
+			double yawLeft = Math.atan((left.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_X);
+			double yawRight = Math.atan((right.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_X);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitchLeft = Math.atan((left.cY - cy) / FOCAL_LENGTH_V);
-			double pitchRight = Math.atan((right.cY - cy) / FOCAL_LENGTH_V);
+			double pitchLeft = Math.atan((left.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_Y);
+			double pitchRight = Math.atan((right.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_Y);
 			SmartDashboard.putNumber("Pleft", pitchLeft);
 			SmartDashboard.putNumber("Pright", pitchRight);
 
@@ -238,6 +221,8 @@ public class VisionCargoBay {
 			double yawMiddle = (yawLeft + yawRight) / 2;
 			targetCUltraSonic.x = getUltraDistance() * Math.tan(yawMiddle) + cameraLocation.x;
 			targetCUltraSonic.y = getUltraDistance() + cameraLocation.y;
+
+			
 
 			// Using some trig (see MAGIC), converts the pitch and yaw to unit vectors in
 			// the direction of the target for each side.
@@ -316,13 +301,28 @@ public class VisionCargoBay {
 		return xPrimeC;
 	}
 
+	/**
+	 * Factor that normalizes the pixels by making the top left corner of the image
+	 * 1 unit from the center.
+	 */
+	public final double NORMALIZATION_FACTOR = Math.sqrt(Math.pow(IMAGE_WIDTH / 2, 2) + Math.pow(IMAGE_HEIGHT / 2, 2));
+
 	public Point2D undistort(double x, double y) {
-		double r2 = Math.pow(x - cx, 2) + Math.pow(y - cy, 2);
-		double x_f = x + (x - cx) * (k1 * r2 + k2 * Math.pow(r2, 2))
-				+ ((p1 * (r2 + 2 * Math.pow(x - cx, 2)) + 2 * p2 * (x - cx) * (y - cy)));
-		double y_f = y + (y - cy) * (k1 * r2 + k2 * Math.pow(r2, 2)) + 2 * p1 * (x - cx) * (y - cy)
-				+ p2 * (r2 + 2 * Math.pow(y - cy, 2));
-		return new Point2D.Double(x_f, y_f);
+		// Normalize pixel location.
+		x = (x - PRINCIPAL_POINT_X) / (NORMALIZATION_FACTOR);
+		y = (y - PRINCIPAL_POINT_Y) / (NORMALIZATION_FACTOR);
+
+		// Apply undistortion
+		double r = Math.pow(x, 2) + Math.pow(y, 2);
+		double factor = (1 + k1 * r + k2 * Math.pow(r, 2));
+		double xFixed = x * factor;
+		double yFixed = y * factor;
+
+		// Revert normalization back to original origin.
+		xFixed = xFixed * NORMALIZATION_FACTOR + PRINCIPAL_POINT_X;
+		yFixed = yFixed * NORMALIZATION_FACTOR + PRINCIPAL_POINT_Y;
+
+		return new Point2D.Double(xFixed, yFixed);
 	}
 
 	/**
