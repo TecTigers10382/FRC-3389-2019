@@ -151,6 +151,16 @@ public class DriveTrain extends Subsystem {
 		rightRear.configAllSettings(t);
 	}
 
+	public void driveVelocity(double leftVelocity, double rightVelocity) {
+
+		double rightVelo = rightVelocity * 4096 * 500 / 600;
+		double leftVelo = leftVelocity * 4096 * 500 / 600;
+		rightFront.set(ControlMode.Velocity, rightVelo / 1.5);
+		leftFront.set(ControlMode.Velocity, leftVelo / 1.5);
+		rightRear.set(ControlMode.Velocity, rightVelo / 1.5);
+		leftRear.set(ControlMode.Velocity, leftVelo / 1.5);
+	}
+
 	/**
 	 * Initializes the DriveTrain's default command to the Drive command. The
 	 * default for this subsystem is the associated teliop command.
