@@ -246,8 +246,8 @@ public class VisionCargoBay {
 			double yawLeft = Math.atan((left.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_X);
 			double yawRight = Math.atan((right.cX - IMAGE_WIDTH / 2) / FOCAL_LENGTH_X);
 			// Gives angle in radians relative to center x line, down is negative
-			double pitchLeft = Math.atan((left.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_Y);
-			double pitchRight = Math.atan((right.cY - IMAGE_HEIGHT / 2) / FOCAL_LENGTH_Y);
+			double pitchLeft = Math.atan((IMAGE_HEIGHT / 2 - left.cY) / FOCAL_LENGTH_Y);
+			double pitchRight = Math.atan((IMAGE_HEIGHT / 2 - right.cY) / FOCAL_LENGTH_Y);
 
 			// Rotate target angles to robot's reference frame
 			yawLeft = yawLeft + cameraLocation.yaw;
