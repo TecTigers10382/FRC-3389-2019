@@ -65,6 +65,11 @@ public class VisionCargoBay {
 	final double k2 = -0.1322;
 
 	/**
+	 * Boolean to determine if targets are in view
+	 */
+	boolean targetID;
+
+	/**
 	 * Height of target center in inches measured from the ground.
 	 */
 	final double TARGET_HEIGHT = 3 * 12;
@@ -139,6 +144,7 @@ public class VisionCargoBay {
 		// Checks that the camera has actually found the target.
 		if (centerX.length >= 2) {
 			VisionTarget left, right;
+			targetID = true;
 			ArrayList<VisionTarget> targets = new ArrayList<>();
 			for (int i = 0; i < centerX.length; i++) {
 				targets.add(new VisionTarget(centerX[i], centerY[i], width[i], height[i], area[i]));
@@ -299,6 +305,7 @@ public class VisionCargoBay {
 			// Store projection of the vector from left to right on XY plane.
 			targetLine.set(targetR.x - targetL.x, targetR.y - targetL.y, 0);
 		} else {
+			targetID = false;
 			System.out.println("ERROR Camera failed to find any targets");
 		}
 	}
@@ -307,7 +314,7 @@ public class VisionCargoBay {
 	 * @return Distance from center of robot to target projected onto XY plane.
 	 */
 	// public double getDistanceXY() {
-	// 	return Math.sqrt(Math.pow(targetC.x, 2) + Math.pow(targetC.y, 2));
+	// return Math.sqrt(Math.pow(targetC.x, 2) + Math.pow(targetC.y, 2));
 	// }
 
 	/**
@@ -326,16 +333,20 @@ public class VisionCargoBay {
 		return Math.toDegrees(Math.atan(targetC.x / targetC.y));
 	}
 
+	public boolean getTargetID() {
+		return targetID;
+	}
+
 	/**
 	 * @return Distance needed to be traveled in the x direction after the robot has
 	 *         rotated.
 	 */
 	// public double distanceX() {
-	// 	// Angle needed to be turned
-	// 	double yaw = Math.atan(targetLine.y / targetLine.x);
-	// 	// Rotation of axes
-	// 	double xPrimeC = targetC.x * Math.cos(yaw) + targetC.y * Math.sin(yaw);
-	// 	return xPrimeC;
+	// // Angle needed to be turned
+	// double yaw = Math.atan(targetLine.y / targetLine.x);
+	// // Rotation of axes
+	// double xPrimeC = targetC.x * Math.cos(yaw) + targetC.y * Math.sin(yaw);
+	// return xPrimeC;
 	// }
 
 	public double distanceXY() {
@@ -393,11 +404,11 @@ public class VisionCargoBay {
 	 *         rotated.
 	 */
 	// public double distanceY() {
-	// 	// Angle needed to be turned
-	// 	double yaw = Math.atan(targetLine.y / targetLine.x);
-	// 	// Rotation of axes()
-	// 	double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
-	// 	return yPrimeC;
+	// // Angle needed to be turned
+	// double yaw = Math.atan(targetLine.y / targetLine.x);
+	// // Rotation of axes()
+	// double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
+	// return yPrimeC;
 	// }
 
 	/**
