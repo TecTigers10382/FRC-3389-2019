@@ -79,9 +79,9 @@ public class DriveTurn extends Command {
 
 		SmartDashboard.putNumber("error", error);
 		if (turn < 0) {
-			Robot.driveTrain.driveVelocity(-(direction * result_speed), (direction * result_speed));
+			Robot.driveTrain.driveVelocity(0, 0, -(direction * result_speed));
 		} else {
-			Robot.driveTrain.driveVelocity((direction * result_speed), -(direction * result_speed));
+			Robot.driveTrain.driveVelocity(0, 0, (direction * result_speed));
 		}
 
 		double[] temp = { timer, current, error, integral, derivative, result_speed };

@@ -151,14 +151,24 @@ public class DriveTrain extends Subsystem {
 		rightRear.configAllSettings(t);
 	}
 
-	public void driveVelocity(double leftVelocity, double rightVelocity) {
+	public void driveVelocity(double x, double y, double rotation) {
 
-		double rightVelo = rightVelocity * 4096 * 500 / 600;
-		double leftVelo = leftVelocity * 4096 * 500 / 600;
-		rightFront.set(ControlMode.Velocity, rightVelo / 1.5);
-		leftFront.set(ControlMode.Velocity, leftVelo / 1.5);
-		rightRear.set(ControlMode.Velocity, rightVelo / 1.5);
-		leftRear.set(ControlMode.Velocity, leftVelo / 1.5);
+		double xIn = x;
+		double yIn = y;
+		// Negate y for the joystick.
+		yIn = -yIn;
+
+		double[] wheelSpeeds = new double[kMaxNumberOfMotors];
+		wheelSpeeds[0] = (xIn + yIn + rotation) * 4096 * 500 / 600;
+		wheelSpeeds[1] = -xIn + yIn - rotation * 4096 * 500 / 600;
+		wheelSpeeds[2] = -xIn + yIn + rotation * 4096 * 500 / 600;
+		wheelSpeeds[3] = xIn + yIn - rotation * 4096 * 500 / 600;
+
+		normalize(wheelSpeeds);
+		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[0] / 1.5);
+		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[1] / 1.5);
+		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[2] / 1.5);
+		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[3] / 1.5);
 	}
 
 	/**
