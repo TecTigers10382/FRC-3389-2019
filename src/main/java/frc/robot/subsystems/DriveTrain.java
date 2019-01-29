@@ -165,10 +165,10 @@ public class DriveTrain extends Subsystem {
 		wheelSpeeds[3] = xIn + yIn - rotation * 4096 * 500 / 600;
 
 		normalize(wheelSpeeds);
-		leftFront.set(ControlMode.PercentOutput, wheelSpeeds[0] / 1.5);
-		rightFront.set(ControlMode.PercentOutput, wheelSpeeds[1] / 1.5);
-		leftRear.set(ControlMode.PercentOutput, wheelSpeeds[2] / 1.5);
-		rightRear.set(ControlMode.PercentOutput, wheelSpeeds[3] / 1.5);
+		leftFront.set(ControlMode.Velocity, wheelSpeeds[0] / 1.5);
+		rightFront.set(ControlMode.Velocity, wheelSpeeds[1] / 1.5);
+		leftRear.set(ControlMode.Velocity, wheelSpeeds[2] / 1.5);
+		rightRear.set(ControlMode.Velocity, wheelSpeeds[3] / 1.5);
 	}
 
 	/**
