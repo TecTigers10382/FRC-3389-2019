@@ -350,19 +350,19 @@ public class VisionCargoBay {
 	// }
 
 	public double distanceXY() {
-		double sideB = (ultraDistanceY() * Math.sin(90 + yawDegrees())
-				/ Math.sin(180 - ((90 + yawDegrees()) + rawDegrees())));
+		double sideB = (ultraDistanceY()
+				* Math.sin(90 + -yawDegrees() / Math.sin(180 - ((90 + -yawDegrees() + rawDegrees())))));
 		return sideB;
 	}
 
 	public double deltaX() {
-		double theta = 90 - rawDegrees() - yawDegrees();
+		double theta = 90 - rawDegrees() - (-yawDegrees());
 		double x = distanceXY() * Math.cos(theta);
 		return x;
 	}
 
 	public double deltaY() {
-		double theta = 90 - rawDegrees() - yawDegrees();
+		double theta = 90 - rawDegrees() - (-yawDegrees());
 		double y = distanceXY() * Math.sin(theta);
 		return y;
 	}
