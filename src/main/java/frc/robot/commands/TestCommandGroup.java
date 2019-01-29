@@ -7,14 +7,24 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.RobotMap;
-
+import frc.robot.utils.VisionCargoBay;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class TestCommandGroup extends CommandGroup {
 	// private properties here
-
+	
 	public TestCommandGroup() {
+		if(Robot.bay.getTargetID()){
+			//FIRST: get target to the center
+				addSequential(new DriveTurn(.5 ,Robot.bay.rawDegrees()));//assuming gyro returns degrees
+			//SECOND: get robot parallel
+				//addSequential(new DriveTurn(speed, turn));
+			//THIRD: strafe delta X
+			//FOURTH: drive forward delta Y
+			
+		}
 		// addSequential(new Command());
 
 		// addParallel(new Command());
