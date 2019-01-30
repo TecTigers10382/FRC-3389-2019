@@ -337,8 +337,8 @@ public class VisionCargoBay {
 	 * @return Distance from center of robot to target projected onto XY plane.
 	 */
 	public double distanceXY() {
-		double sideB = (ultraDistanceY() * Math.sin(90 + Math.toRadians(yawDegrees())
-				/ Math.sin(180 - ((90 + Math.toRadians(yawDegrees()) + Math.toRadians(rawDegrees()))))));
+		double sideB = (ultraDistanceY() * Math.sin(Math.toRadians(90 + yawDegrees()))
+				/ Math.sin(Math.toRadians(180 - (90 + yawDegrees()) + rawDegrees())));
 		return sideB;
 	}
 
