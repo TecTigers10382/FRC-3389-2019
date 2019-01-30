@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.iodevices.GyroWrapper;
@@ -169,6 +170,19 @@ public class DriveTrain extends Subsystem {
 		rightFront.set(ControlMode.Velocity, wheelSpeeds[1] / 1.5);
 		leftRear.set(ControlMode.Velocity, wheelSpeeds[2] / 1.5);
 		rightRear.set(ControlMode.Velocity, wheelSpeeds[3] / 1.5);
+	}
+
+	public void drivePosition(double FL, double FR, double RL, double RR) {
+		double[] pos = new double[4];
+		pos[0] = FL;
+		pos[1] = FR;
+		pos[2] = RL;
+		pos[3] = RR;
+
+		leftFront.set(ControlMode.Position, pos[0]);
+		rightFront.set(ControlMode.Position, pos[1]);
+		leftRear.set(ControlMode.Position, pos[2]);
+		rightRear.set(ControlMode.Position, pos[3]);
 	}
 
 	/**
