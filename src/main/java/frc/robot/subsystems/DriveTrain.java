@@ -160,12 +160,12 @@ public class DriveTrain extends Subsystem {
 		yIn = -yIn;
 
 		double[] wheelSpeeds = new double[kMaxNumberOfMotors];
+		normalize(wheelSpeeds);
 		wheelSpeeds[0] = (xIn + yIn + rotation) * 4096 * 500 / 600;
 		wheelSpeeds[1] = -xIn + yIn - rotation * 4096 * 500 / 600;
 		wheelSpeeds[2] = -xIn + yIn + rotation * 4096 * 500 / 600;
 		wheelSpeeds[3] = xIn + yIn - rotation * 4096 * 500 / 600;
 
-		normalize(wheelSpeeds);
 		leftFront.set(ControlMode.Velocity, wheelSpeeds[0] / 1.5);
 		rightFront.set(ControlMode.Velocity, wheelSpeeds[1] / 1.5);
 		leftRear.set(ControlMode.Velocity, wheelSpeeds[2] / 1.5);
