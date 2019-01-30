@@ -19,6 +19,7 @@ import frc.robot.subsystems.DriveTrain;
 public class AutoAlign extends Command {
 	double[] pos = new double[4];
 	DriveTrain drive;
+	boolean done = false;
 
 	public AutoAlign() {
 		// Use requires() here to declare subsystem dependencies
@@ -38,13 +39,13 @@ public class AutoAlign extends Command {
 			pos = Robot.bay.mecanumPath(Robot.bay.deltaX(), Robot.bay.deltaY(), Robot.bay.yawDegrees());
 			drive.drivePosition(pos[0], pos[1], pos[2], pos[3]);
 		} else
-			isFinished();
+			done = true;
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return done;
 	}
 
 	// Called once after isFinished returns true
