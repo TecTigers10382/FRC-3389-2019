@@ -464,9 +464,9 @@ public class VisionCargoBay {
 	 * x+ is right from the origin. </br>
 	 * CCW rotation is positive. </br>
 	 * 
-	 * @param x   x-coordinate relative to robot in inches.
-	 * @param y   y-coordinate relative to robot in inches.
-	 * @param rot angle to rotate relative to robot in degrees. -2pi<rot<2pi
+	 * @param x   x-coordinate relative to robot in inches after rotation.
+	 * @param y   y-coordinate relative to robot in inches after rotation.
+	 * @param rot angle to rotate relative to robot in degrees. -360<rot<360
 	 * @return How many radians each wheel must rotate to reach desired location
 	 */
 	public double[] mecanumPath(double x, double y, double rot) {
@@ -477,6 +477,14 @@ public class VisionCargoBay {
 		y = -x;
 		x = temp;
 		rot = -Math.toRadians(rot);
+
+		// Rotate x and y back because we give it the delta x and delta y after rotating
+		// when it needs before.
+		temp = x * Math.cos(rot) - y * Math.sin(rot);
+		double temp2 = x * Math.sin(rot) + y * Math.cos(rot);
+
+		x = temp;
+		y = temp2;
 
 		// To avoid divide by 0 error (basically a limit)
 		if (rot == 0)
