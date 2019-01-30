@@ -311,13 +311,6 @@ public class VisionCargoBay {
 	}
 
 	/**
-	 * @return Distance from center of robot to target projected onto XY plane.
-	 */
-	// public double getDistanceXY() {
-	// return Math.sqrt(Math.pow(targetC.x, 2) + Math.pow(targetC.y, 2));
-	// }
-
-	/**
 	 * @return Degrees needed to be rotated until robot x axis is parrallel to
 	 *         target face. CCW is positive.
 	 */
@@ -333,37 +326,39 @@ public class VisionCargoBay {
 		return Math.toDegrees(Math.atan(targetC.x / targetC.y));
 	}
 
+	/**
+	 * @return Boolean indicating whether target is in camera view
+	 */
 	public boolean getTargetID() {
 		return targetID;
+	}
+
+	/**
+	 * @return Distance from center of robot to target projected onto XY plane.
+	 */
+	public double distanceXY() {
+		double sideB = (ultraDistanceY() * Math.sin(90 + Math.toRadians(yawDegrees())
+				/ Math.sin(180 - ((90 + Math.toRadians(yawDegrees()) + Math.toRadians(rawDegrees()))))));
+		return sideB;
 	}
 
 	/**
 	 * @return Distance needed to be traveled in the x direction after the robot has
 	 *         rotated.
 	 */
-	// public double distanceX() {
-	// // Angle needed to be turned
-	// double yaw = Math.atan(targetLine.y / targetLine.x);
-	// // Rotation of axes
-	// double xPrimeC = targetC.x * Math.cos(yaw) + targetC.y * Math.sin(yaw);
-	// return xPrimeC;
-	// }
-
-	public double distanceXY() {
-		double sideB = (ultraDistanceY()
-				* Math.sin(90 + -yawDegrees() / Math.sin(180 - ((90 + -yawDegrees() + rawDegrees())))));
-		return sideB;
-	}
-
 	public double deltaX() {
-		double theta = 90 - rawDegrees() - (-yawDegrees());
-		double x = distanceXY() * Math.cos(theta);
+		double theta = 90 - rawDegrees() - yawDegrees();
+		double x = distanceXY() * Math.cos(Math.toRadians(theta));
 		return x;
 	}
 
+	/**
+	 * @return Distance needed to be traveled in the y direction after the robot has
+	 *         rotated.
+	 */
 	public double deltaY() {
-		double theta = 90 - rawDegrees() - (-yawDegrees());
-		double y = distanceXY() * Math.sin(theta);
+		double theta = 90 - rawDegrees() - yawDegrees();
+		double y = distanceXY() * Math.sin(Math.toRadians(theta));
 		return y;
 	}
 
@@ -398,18 +393,6 @@ public class VisionCargoBay {
 
 		return new Point2D.Double(xFixed, yFixed);
 	}
-
-	/**
-	 * @return Distance needed to be traveled in the y direction after the robot has
-	 *         rotated.
-	 */
-	// public double distanceY() {
-	// // Angle needed to be turned
-	// double yaw = Math.atan(targetLine.y / targetLine.x);
-	// // Rotation of axes()
-	// double yPrimeC = -targetC.x * Math.sin(yaw) + targetC.y * Math.cos(yaw);
-	// return yPrimeC;
-	// }
 
 	/**
 	 * @return Distance needed to be traveled in the y direction according to
