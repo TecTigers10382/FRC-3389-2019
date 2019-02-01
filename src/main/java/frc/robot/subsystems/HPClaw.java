@@ -44,6 +44,10 @@ public class HPClaw extends Subsystem {
 		claw.setAngle(30);
 	}
 
+	public void toEject() {
+		claw.setAngle(15);
+	}
+
 	@Override
 	public void initDefaultCommand() {
 		// setDefaultCommand(new MySpecialCommand());
