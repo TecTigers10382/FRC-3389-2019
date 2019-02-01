@@ -10,6 +10,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.AutoAlign;
+import frc.robot.commands.TeleOpEjector;
 import frc.robot.commands.TeleOpHP;
 
 /**
@@ -22,7 +24,9 @@ public class OI {
 	Joystick jsDriver = new Joystick(0);
 	Joystick jsOperator = new Joystick(1);
 
-	Button claw = new JoystickButton(jsOperator, 5);
+	Button claw = new JoystickButton(jsOperator, 5);//remember to change later
+	Button align = new JoystickButton(jsDriver, 8);//remember to change later
+	Button eject = new JoystickButton(jsOperator, 9);//remember to change later
 
 	/**
 	 * Sets up claw as toggle button to control the hatch panel claw.
@@ -30,6 +34,8 @@ public class OI {
 	public OI() {
 
 		claw.toggleWhenPressed(new TeleOpHP());
+		eject.toggleWhenPressed(new TeleOpEjector());
+		align.whenPressed(new AutoAlign());
 	}
 
 	/**
