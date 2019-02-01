@@ -25,6 +25,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.iodevices.AnalogUltraSonic;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Ejector;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
@@ -51,6 +52,7 @@ public class Robot extends TimedRobot {
 	public static final Intake intake = new Intake();
 	public static final Lift lift = new Lift();
 	public static final HPClaw claw = new HPClaw();
+	public static final Ejector eject = new Ejector();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
