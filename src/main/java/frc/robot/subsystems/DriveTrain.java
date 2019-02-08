@@ -55,6 +55,9 @@ public class DriveTrain extends Subsystem {
 		rightFront.setInverted(true);
 		rightRear.setInverted(true);
 
+		rightRear.setSensorPhase(true);
+		leftFront.setSensorPhase(true);
+
 		line = new DigitalInput(0);
 
 		gyro = new GyroWrapper();
