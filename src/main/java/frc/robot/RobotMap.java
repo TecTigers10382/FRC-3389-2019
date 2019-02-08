@@ -47,6 +47,16 @@ public class RobotMap {
 	public static final double DEADZONE = 0.1;
 
 	/**
+	 * Max RPM of wheel
+	 */
+	public static final int kMaxRPM = 500;
+
+	/**
+	 * Units per rotation for CIMcoder
+	 */
+	public static final int kUnitsPerRotation = 80;
+
+	/**
 	 * If true, will configure all talons to their factory defaults, then to the
 	 * configuration in utils/TalonConfig
 	 * 

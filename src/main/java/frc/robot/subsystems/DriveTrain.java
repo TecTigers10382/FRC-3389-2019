@@ -168,10 +168,10 @@ public class DriveTrain extends Subsystem {
 
 		normalize(wheelSpeeds);
 
-		leftFront.set(ControlMode.Velocity, wheelSpeeds[0] * 4096 * 500 / 600 / 1.5);
-		rightFront.set(ControlMode.Velocity, wheelSpeeds[1] * 4096 * 500 / 600 / 1.5);
-		leftRear.set(ControlMode.Velocity, wheelSpeeds[2] * 4096 * 500 / 600 / 1.5);
-		rightRear.set(ControlMode.Velocity, wheelSpeeds[3] * 4096 * 500 / 600 / 1.5);
+		leftFront.set(ControlMode.Velocity, wheelSpeeds[0] * (RobotMap.kMaxRPM * RobotMap.kUnitsPerRotation / 1.5));
+		rightFront.set(ControlMode.Velocity, wheelSpeeds[1] * (RobotMap.kMaxRPM * RobotMap.kUnitsPerRotation / 1.5));
+		leftRear.set(ControlMode.Velocity, wheelSpeeds[2] * (RobotMap.kMaxRPM * RobotMap.kUnitsPerRotation / 1.5));
+		rightRear.set(ControlMode.Velocity, wheelSpeeds[3] * (RobotMap.kMaxRPM * RobotMap.kUnitsPerRotation / 1.5));
 	}
 
 	public void drivePosition(double FL, double FR, double RL, double RR) {
