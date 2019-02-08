@@ -49,7 +49,7 @@ public class RobotMap {
 	/**
 	 * Max RPM of wheel
 	 */
-	public static final int kMaxRPM = 500;
+	public static final int kMaxRPM = 250;
 
 	/**
 	 * Units per rotation for CIMcoder
