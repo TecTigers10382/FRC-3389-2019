@@ -27,17 +27,16 @@ public class Lift extends Subsystem {
 	// Commands that use this subsystem
 	// TeleOpLift
 
-	TalonSRX liftR, liftL;
+	TalonSRX lift;
 	Potentiometer pot;
 
 	public Lift() {
-		liftL = new TalonSRX(RobotMap.LIFT_LEFT);
-		liftR = new TalonSRX(RobotMap.LIFT_RIGHT);
+		lift = new TalonSRX(RobotMap.LIFT_LEFT);
 
-		liftL.follow(liftR);
+		// liftL.follow(liftR);
 
-		liftR.setInverted(false);
-		liftL.setInverted(InvertType.OpposeMaster);
+		// liftR.setInverted(false);
+		// liftL.setInverted(InvertType.OpposeMaster);
 
 		pot = new AnalogPotentiometer(RobotMap.POT_INPUT, 360, 0);
 	}
@@ -48,7 +47,7 @@ public class Lift extends Subsystem {
 	 * @param power percentage of power to lift motors (-1 to 1)
 	 */
 	public void rawLift(double power) {
-		liftR.set(ControlMode.PercentOutput, power);
+		lift.set(ControlMode.PercentOutput, power);
 	}
 
 	/**
@@ -58,11 +57,10 @@ public class Lift extends Subsystem {
 	 * @param t A configuration for all Talon SRXs in the subsystem.
 	 */
 	public void configTalons(TalonSRXConfiguration t) {
-		liftL.configFactoryDefault();
-		liftR.configFactoryDefault();
+		lift.configFactoryDefault();
 
-		liftL.configAllSettings(t);
-		liftR.configAllSettings(t);
+		lift.configAllSettings(t);
+
 	}
 
 	/**
