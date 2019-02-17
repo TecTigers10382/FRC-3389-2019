@@ -24,7 +24,7 @@ public class RobotMap {
 	/**
 	 * CAN IDs of all Talon SRXs used for lift.
 	 */
-	public final static int LIFT_RIGHT = 5, LIFT_LEFT = 6;
+	public final static int LIFT_LEFT = 5, LIFT_RIGHT = 6;
 
 	/**
 	 * CAN IDs of all Talon SRXs used for intake.
