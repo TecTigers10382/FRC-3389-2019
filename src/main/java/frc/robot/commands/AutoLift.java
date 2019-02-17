@@ -26,16 +26,6 @@ public class AutoLift extends Command {
 	Potentiometer pot;
 
 	public AutoLift() {
-		liftL = new TalonSRX(RobotMap.LIFT_LEFT);
-		liftR = new TalonSRX(RobotMap.LIFT_RIGHT);
-
-		liftL.follow(liftR);
-
-		liftR.setInverted(false);
-		liftL.setInverted(InvertType.OpposeMaster);
-
-		liftL.getSelectedSensorPosition();
-		// pot = new AnalogPotentiometer(RobotMap.POT_INPUT, 360, 0);
 
 	}
 
