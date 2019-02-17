@@ -198,13 +198,13 @@ public class DriveTrain extends Subsystem {
 	 */
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleOpDrive());
+		// setDefaultCommand(new TeleOpDrive()); NEED TO FIGURE OUT WHY ERRORING
 
 	}
 
-	public boolean getLine() {
-		return line.get();
-	}
+	// public boolean getLine() {
+	// return line.get();
+	// }
 
 	public GyroWrapper getGyro() {
 		return gyro;
