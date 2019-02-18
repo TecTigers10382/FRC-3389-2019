@@ -21,31 +21,43 @@ public class HPClaw extends Subsystem {
 	// Commands that use this subsystem.
 	// TeleOpHP
 
-	Servo claw;
+	Servo clawL, clawR;
 
 	/**
 	 * Constructor. Initializes Servo.
 	 */
 	public HPClaw() {
-		claw = new Servo(1);
+		clawL = new Servo(1);
+		clawR = new Servo(2);
 	}
 
 	/**
 	 * Closes claw by setting servo angle to 0
 	 */
 	public void close() {
-		claw.setAngle(0);
+		clawL.setAngle(0);
+		clawR.setAngle(0);
 	}
 
 	/**
 	 * Opens claw by setting servo angle to 30
 	 */
 	public void open() {
-		claw.setAngle(30);
+		clawL.setAngle(180);
+		clawR.setAngle(180);
 	}
 
 	public void toEject() {
-		claw.setAngle(15);
+		clawL.setAngle(15);
+		clawR.setAngle(15);
+	}
+
+	public double getLAngle() {
+		return clawL.getAngle();
+	}
+
+	public double getRAngle() {
+		return clawR.getAngle();
 	}
 
 	@Override

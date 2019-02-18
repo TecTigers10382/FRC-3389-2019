@@ -27,7 +27,7 @@ public class Ejector extends Subsystem {
 	 * Constructor. Initializes Servo.
 	 */
 	public Ejector() {
-		ejector = new Servo(2);
+		ejector = new Servo(3);
 	}
 
 	/**
