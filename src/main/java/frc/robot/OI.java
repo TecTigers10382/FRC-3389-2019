@@ -24,17 +24,22 @@ public class OI {
 	Joystick jsDriver = new Joystick(0);
 	Joystick jsOperator = new Joystick(1);
 
-	Button claw = new JoystickButton(jsOperator, 5);//remember to change later
-	Button align = new JoystickButton(jsDriver, 8);//remember to change later
-	Button eject = new JoystickButton(jsOperator, 9);//remember to change later
+	Button claw = new JoystickButton(jsOperator, 5);// remember to change later
+
+	Button align = new JoystickButton(jsDriver, 8);// remember to change later
+	Button eject = new JoystickButton(jsOperator, 9);// remember to change later
 
 	/**
 	 * Sets up claw as toggle button to control the hatch panel claw.
 	 */
 	public OI() {
-
+		//open and close the claw used for cargo
 		claw.toggleWhenPressed(new TeleOpHP());
+
+		//servo on the claw that pushes the cargo out
 		eject.toggleWhenPressed(new TeleOpEjector());
+
+		//uses the image tracking to align the robot with the relfective tape on the rocket
 		align.whenPressed(new AutoAlign());
 	}
 

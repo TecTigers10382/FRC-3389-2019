@@ -199,15 +199,18 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-
-		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());
+		
+		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());//
 		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
-		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY());
-		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX());
-		SmartDashboard.putBoolean("TargetID", bay.getTargetID());
-		SmartDashboard.putNumber("Delta X", bay.deltaX());
-		SmartDashboard.putNumber("Delta Y", bay.deltaY());
 
+		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY()); //Y distance away from target based off of the ultradistance sensor
+		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX()); //X distance away from target based off of the ultradistance sensor
+		SmartDashboard.putBoolean("TargetID", bay.getTargetID()); //return true if cargo bay's reflective tape is in view
+		SmartDashboard.putNumber("Delta X", bay.deltaX()); //X distance away from cargo bay based off of trig calculations
+		SmartDashboard.putNumber("Delta Y", bay.deltaY()); //Y distance away from cargo bay based off of trig calculations
+
+		SmartDashboard.putNumber("ClawL Position", claw.getLAngle());
+		SmartDashboard.putNumber("ClawR Position", claw.getRAngle());
 		SmartDashboard.putNumber("FL Displacement", bay.mecanumPath(bay.deltaX(), bay.deltaY(), bay.yawDegrees())[0]);
 	}
 
