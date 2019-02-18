@@ -30,14 +30,11 @@ public class Lift extends Subsystem {
 	TalonSRX liftL, liftR;
 	Potentiometer pot;
 
+	double heightRangeLow, heightRangeHigh;
+
 	public Lift() {
-		liftL = new TalonSRX(RobotMap.LIFT_LEFT);
-		liftR = new TalonSRX(RobotMap.LIFT_RIGHT);
-
-		liftL.follow(liftR);
-
-		liftR.setInverted(false);
-		liftL.setInverted(InvertType.OpposeMaster);
+		liftL = new TalonSRX(RobotMap.LIFT_LEFT);// Talon 5
+		liftR = new TalonSRX(RobotMap.LIFT_RIGHT);// Talon 6
 
 		pot = new AnalogPotentiometer(RobotMap.POT_INPUT, 360, 0);
 	}
@@ -48,7 +45,19 @@ public class Lift extends Subsystem {
 	 * @param power percentage of power to lift motors (-1 to 1)
 	 */
 	public void rawLift(double power) {
-		liftR.set(ControlMode.PercentOutput, power);
+		// Power divided by 2 because it was too fast and caused the lift to be bouncy
+		// when moving
+		liftR.set(ControlMode.PercentOutput, power / 2);
+		liftL.set(ControlMode.PercentOutput, -power / 2);
+	}
+
+	public void liftPos(double height) {
+		heightRangeLow = height - RobotMap.LIFT_DEADZONE;
+		heightRangeHigh = height + RobotMap.LIFT_DEADZONE;
+		while (liftR.getSelectedSensorPosition(0) < heightRangeLow
+				|| liftR.getSelectedSensorPosition(0) > heightRangeHigh) {
+			liftR.set(ControlMode.Position, height);
+		}
 	}
 
 	/**

@@ -46,6 +46,8 @@ public class RobotMap {
 	 */
 	public static final double DEADZONE = 0.1;
 
+	public static final double LIFT_DEADZONE = 5.0;
+
 	/**
 	 * Max RPM of wheel
 	 */
