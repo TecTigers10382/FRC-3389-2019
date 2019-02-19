@@ -7,14 +7,10 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
+import frc.robot.subsystems.Lift;
 
 /**
  * Put description here.
@@ -22,11 +18,14 @@ import frc.robot.RobotMap;
  * @author FRC Team 3389 TEC Tigers
  */
 public class AutoLift extends Command {
-	TalonSRX liftR, liftL;
+	Lift lift;
 	Potentiometer pot;
+	double liftHeight;
 
-	public AutoLift() {
-
+	public AutoLift(double height) {
+		requires(Robot.lift);
+		lift = Robot.lift;
+		liftHeight = height;
 	}
 
 	// Called just before this Command runs the first time
@@ -37,7 +36,7 @@ public class AutoLift extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	@Override
 	protected void execute() {
-
+		lift.liftPos(liftHeight);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -49,6 +48,7 @@ public class AutoLift extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
+		lift.stop();
 	}
 
 	// Called when another command which requires one or more of the same
