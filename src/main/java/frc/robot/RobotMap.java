@@ -59,6 +59,13 @@ public class RobotMap {
 	public static final int kUnitsPerRotation = 80;
 
 	/**
+	 * Potentiometer positions related to rocket ports
+	 */
+	public static final double PORT1 = 1; // CHANGE LATER
+	public static final double PORT2 = 2; // CHANGE LATER
+	public static final double PORT3 = 3; // CHANGE LATER
+
+	/**
 	 * If true, will configure all talons to their factory defaults, then to the
 	 * configuration in utils/TalonConfig
 	 * 
