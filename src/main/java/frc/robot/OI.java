@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.AutoLift;
 import frc.robot.commands.TeleOpEjector;
 import frc.robot.commands.TeleOpHP;
 
@@ -29,18 +30,28 @@ public class OI {
 	Button align = new JoystickButton(jsDriver, 8);// remember to change later
 	Button eject = new JoystickButton(jsOperator, 9);// remember to change later
 
+	Button port1 = new JoystickButton(jsOperator, 1);
+	Button port2 = new JoystickButton(jsOperator, 2);
+	Button port3 = new JoystickButton(jsOperator, 3);
+
 	/**
 	 * Sets up claw as toggle button to control the hatch panel claw.
 	 */
 	public OI() {
-		//open and close the claw used for cargo
+		// open and close the claw used for cargo
 		claw.toggleWhenPressed(new TeleOpHP());
 
-		//servo on the claw that pushes the cargo out
+		// servo on the claw that pushes the cargo out
 		eject.toggleWhenPressed(new TeleOpEjector());
 
-		//uses the image tracking to align the robot with the relfective tape on the rocket
+		// uses the image tracking to align the robot with the relfective tape on the
+		// rocket
 		align.whenPressed(new AutoAlign());
+
+		// lifts to rocket port heights
+		port1.whenPressed(new AutoLift(RobotMap.PORT1));
+		port2.whenPressed(new AutoLift(RobotMap.PORT2));
+		port3.whenPressed(new AutoLift(RobotMap.PORT3));
 	}
 
 	/**
