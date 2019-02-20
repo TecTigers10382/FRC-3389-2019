@@ -47,8 +47,17 @@ public class Lift extends Subsystem {
 	public void rawLift(double power) {
 		// Power divided by 2 because it was too fast and caused the lift to be bouncy
 		// when moving
-		liftR.set(ControlMode.PercentOutput, power / 2);
-		liftL.set(ControlMode.PercentOutput, -power / 2);
+		if (power >= RobotMap.DEADZONE) {
+			liftR.set(ControlMode.PercentOutput, power / 2);
+			liftL.set(ControlMode.PercentOutput, -power / 2);
+		} else if (power < -RobotMap.DEADZONE) {
+			liftR.set(ControlMode.PercentOutput, power / 4);
+			liftL.set(ControlMode.PercentOutput, -power / 4);
+		} else {
+			liftR.set(ControlMode.PercentOutput, 0);
+			liftL.set(ControlMode.PercentOutput, 0);
+		}
+
 	}
 
 	public void liftPos(double height) {
