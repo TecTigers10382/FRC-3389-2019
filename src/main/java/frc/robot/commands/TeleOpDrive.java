@@ -32,8 +32,8 @@ public class TeleOpDrive extends Command {
 	 */
 	public TeleOpDrive() {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.driveTrain);
-		drive = Robot.driveTrain;
+		// requires(Robot.driveTrain);
+		drive = Robot.drive_Train;
 
 		driveStick = Robot.operatorControllers.getDriverJoystick();
 	}

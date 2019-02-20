@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.CameraTurn;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.TeleOpDrive;
 import frc.robot.iodevices.AnalogUltraSonic;
 import frc.robot.iodevices.oled.OLEDDisplay;
 import frc.robot.subsystems.DriveTrain;
@@ -47,7 +48,7 @@ public class Robot extends TimedRobot {
 	public static OI operatorControllers;
 	public static TalonConfig talonConfig = new TalonConfig();
 
-	public static final DriveTrain driveTrain = new DriveTrain();
+	public static final DriveTrain drive_Train = new DriveTrain();
 
 	public static final Intake intake = new Intake();
 	public static final Lift lift = new Lift();
@@ -81,11 +82,11 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		operatorControllers = new OI();
 		m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-		m_chooser.addOption("Camera Tester", new CameraTurn(driveTrain.getGyro(), 0));
+		m_chooser.addOption("Camera Tester", new CameraTurn(drive_Train.getGyro(), 0));
 		SmartDashboard.putData("Auto mode", m_chooser);
 
 		if (RobotMap.CONFIG_TALONS) {
-			driveTrain.configTalons(talonConfig.talon);
+			drive_Train.configTalons(talonConfig.talon);
 			lift.configTalons(talonConfig.talon);
 			intake.configTalons(talonConfig.talon);
 		}
@@ -191,6 +192,7 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+		Scheduler.getInstance().add(new TeleOpDrive());
 	}
 
 	/**
@@ -199,15 +201,20 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		
+
 		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());//
 		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
 
-		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY()); //Y distance away from target based off of the ultradistance sensor
-		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX()); //X distance away from target based off of the ultradistance sensor
-		SmartDashboard.putBoolean("TargetID", bay.getTargetID()); //return true if cargo bay's reflective tape is in view
-		SmartDashboard.putNumber("Delta X", bay.deltaX()); //X distance away from cargo bay based off of trig calculations
-		SmartDashboard.putNumber("Delta Y", bay.deltaY()); //Y distance away from cargo bay based off of trig calculations
+		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY()); // Y distance away from target based off of
+																			// the ultradistance sensor
+		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX()); // X distance away from target based off of
+																			// the ultradistance sensor
+		SmartDashboard.putBoolean("TargetID", bay.getTargetID()); // return true if cargo bay's reflective tape is in
+																	// view
+		SmartDashboard.putNumber("Delta X", bay.deltaX()); // X distance away from cargo bay based off of trig
+															// calculations
+		SmartDashboard.putNumber("Delta Y", bay.deltaY()); // Y distance away from cargo bay based off of trig
+															// calculations
 
 		SmartDashboard.putNumber("ClawL Position", claw.getLAngle());
 		SmartDashboard.putNumber("ClawR Position", claw.getRAngle());

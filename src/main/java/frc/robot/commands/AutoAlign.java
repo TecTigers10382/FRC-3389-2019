@@ -23,7 +23,7 @@ public class AutoAlign extends Command {
 
 	public AutoAlign() {
 		// Use requires() here to declare subsystem dependencies
-		requires(Robot.driveTrain);
+		requires(Robot.drive_Train);
 		drive = new DriveTrain();
 	}
 

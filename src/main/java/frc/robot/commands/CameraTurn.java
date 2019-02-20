@@ -26,6 +26,7 @@ public class CameraTurn extends Command {
 	public CameraTurn(PIDSource input, double target) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
+		requires(Robot.drive_Train);
 		this.input = input;
 		this.target = target;
 	}
@@ -33,7 +34,7 @@ public class CameraTurn extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.driveTrain.resetGyro();
+		Robot.drive_Train.resetGyro();
 		// lastError = target - input.pidGet();
 		lastError = getTarget() - input.pidGet();
 		lastTime = System.currentTimeMillis();
@@ -67,7 +68,7 @@ public class CameraTurn extends Command {
 		SmartDashboard.putNumber("power", power);
 
 		// Writes power to motor
-		Robot.driveTrain.mecanumDrive_Cartesian(0, 0, -power);
+		Robot.drive_Train.mecanumDrive_Cartesian(0, 0, -power);
 
 		// Sets up variables for next time
 		lastTime = time;
@@ -98,13 +99,13 @@ public class CameraTurn extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.driveTrain.mecanumDrive_Cartesian(0, 0, 0);
+		Robot.drive_Train.mecanumDrive_Cartesian(0, 0, 0);
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	@Override
 	protected void interrupted() {
-		Robot.driveTrain.mecanumDrive_Cartesian(0, 0, 0);
+		Robot.drive_Train.mecanumDrive_Cartesian(0, 0, 0);
 	}
 }

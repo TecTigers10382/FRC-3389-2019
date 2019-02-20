@@ -198,7 +198,7 @@ public class DriveTrain extends Subsystem {
 	 */
 	@Override
 	public void initDefaultCommand() {
-		// setDefaultCommand(new TeleOpDrive()); NEED TO FIGURE OUT WHY ERRORING
+		// setDefaultCommand(new TeleOpDrive());
 
 	}
 

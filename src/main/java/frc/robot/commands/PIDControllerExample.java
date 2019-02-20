@@ -53,7 +53,7 @@ public class PIDControllerExample extends Command {
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize() {
-		Robot.driveTrain.resetGyro();
+		Robot.drive_Train.resetGyro();
 
 		// Gets Parameters from SmartDashboard
 		kP = Robot.prefs.getDouble("kP", kP);
@@ -85,7 +85,7 @@ public class PIDControllerExample extends Command {
 	@Override
 	protected void end() {
 		pidController.disable();
-		Robot.driveTrain.mecanumDrive_Cartesian(0, 0, 0);
+		Robot.drive_Train.mecanumDrive_Cartesian(0, 0, 0);
 	}
 
 	// Called when another command which requires one or more of the same
@@ -96,11 +96,11 @@ public class PIDControllerExample extends Command {
 	}
 
 	protected double returnPIDInput() {
-		return Robot.driveTrain.getGyro().pidGet();
+		return Robot.drive_Train.getGyro().pidGet();
 	}
 
 	protected void usePIDOutput(double output) {
-		Robot.driveTrain.mecanumDrive_Cartesian(0, 0, -output);
+		Robot.drive_Train.mecanumDrive_Cartesian(0, 0, -output);
 	}
 
 	protected double getTarget() {

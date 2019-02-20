@@ -37,7 +37,7 @@ public class DriveTurn extends Command {
 	public DriveTurn(double speed, double turn) {
 		// Use requires() here to declare subsystem dependencies
 		// requires(Robot.kExampleSubsystem);
-		requires(Robot.driveTrain);
+		requires(Robot.drive_Train);
 		target_speed = speed;
 		// TODO this will run when the object is made, not when the command runs.
 		// Consider putting this in the initialize method
@@ -50,9 +50,9 @@ public class DriveTurn extends Command {
 		timer = System.nanoTime();
 
 		// get initial heading
-		Robot.driveTrain.gyro.resetValues();
-		initial = Robot.driveTrain.gyro.getFilteredYaw();
-		target_heading = Robot.driveTrain.gyro.getFilteredYaw() + turn;
+		Robot.drive_Train.gyro.resetValues();
+		initial = Robot.drive_Train.gyro.getFilteredYaw();
+		target_heading = Robot.drive_Train.gyro.getFilteredYaw() + turn;
 		// direction calculation variables
 		direction = 1.0;
 		pivot = initial + 180;
@@ -66,7 +66,7 @@ public class DriveTurn extends Command {
 		double elapsed = (double) (System.nanoTime() - timer) / 1000000000.0;
 		timer = System.nanoTime();
 
-		current = Robot.driveTrain.gyro.getFilteredYaw();
+		current = Robot.drive_Train.gyro.getFilteredYaw();
 		previous_error = error;
 		error = target_heading - current;
 
@@ -79,9 +79,9 @@ public class DriveTurn extends Command {
 
 		SmartDashboard.putNumber("error", error);
 		if (turn < 0) {
-			Robot.driveTrain.driveVelocity(0, 0, -(direction * result_speed));
+			Robot.drive_Train.driveVelocity(0, 0, -(direction * result_speed));
 		} else {
-			Robot.driveTrain.driveVelocity(0, 0, (direction * result_speed));
+			Robot.drive_Train.driveVelocity(0, 0, (direction * result_speed));
 		}
 
 		double[] temp = { timer, current, error, integral, derivative, result_speed };
@@ -102,7 +102,7 @@ public class DriveTurn extends Command {
 	// Called once after isFinished returns true
 	@Override
 	protected void end() {
-		Robot.driveTrain.stop();
+		Robot.drive_Train.stop();
 	}
 
 	// Called when another command which requires one or more of the same
