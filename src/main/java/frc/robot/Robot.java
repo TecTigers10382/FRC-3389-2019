@@ -26,6 +26,7 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.TeleOpDrive;
 import frc.robot.iodevices.AnalogUltraSonic;
 import frc.robot.iodevices.oled.OLEDDisplay;
+import frc.robot.subsystems.CargoHold;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Ejector;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -55,6 +56,7 @@ public class Robot extends TimedRobot {
 	public static final Lift lift = new Lift();
 	public static final HPClaw claw = new HPClaw();
 	public static final Ejector eject = new Ejector();
+	public static final CargoHold cargo = new CargoHold();
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -93,7 +95,7 @@ public class Robot extends TimedRobot {
 		}
 
 		CameraServer.getInstance().startAutomaticCapture();
-		
+
 		// Starts streaming camera to driver station and gets results from GRIP
 		// camera = CameraServer.getInstance().startAutomaticCapture();
 		// camera.setResolution(720, 480);
