@@ -44,6 +44,7 @@ public class TeleOpDrive extends Command {
 	 */
 	@Override
 	protected void initialize() {
+		drive.configRamp();
 	}
 
 	/**

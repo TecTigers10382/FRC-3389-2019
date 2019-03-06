@@ -143,6 +143,13 @@ public class DriveTrain extends Subsystem {
 	 * 
 	 * @param t A configuration for all Talon SRXs in the subsystem.
 	 */
+	public void configRamp() {
+		leftFront.configClosedloopRamp(2);
+		rightFront.configClosedloopRamp(2);
+		leftRear.configClosedloopRamp(2);
+		rightRear.configClosedloopRamp(2);
+	}
+
 	public void configTalons(TalonSRXConfiguration t) {
 		leftFront.configFactoryDefault();
 		rightFront.configFactoryDefault();
