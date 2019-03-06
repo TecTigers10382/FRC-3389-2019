@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.TableEntryListener;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -91,6 +92,8 @@ public class Robot extends TimedRobot {
 			intake.configTalons(talonConfig.talon);
 		}
 
+		CameraServer.getInstance().startAutomaticCapture();
+		
 		// Starts streaming camera to driver station and gets results from GRIP
 		// camera = CameraServer.getInstance().startAutomaticCapture();
 		// camera.setResolution(720, 480);
