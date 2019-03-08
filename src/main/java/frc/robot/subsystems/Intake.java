@@ -71,6 +71,6 @@ public class Intake extends Subsystem {
 	 */
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new TeleOpIntake());
+		//setDefaultCommand(new TeleOpIntake(roller, cargoPower));
 	}
 }
