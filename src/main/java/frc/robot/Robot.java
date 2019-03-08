@@ -166,6 +166,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		m_autonomousCommand = m_chooser.getSelected();
+		Scheduler.getInstance().add(new TeleOpDrive());
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
