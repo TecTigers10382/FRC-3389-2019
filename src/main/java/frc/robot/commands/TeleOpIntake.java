@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.CargoHold;
 
 /**
  * Tele-Op command that continuously updates the Intakes with the values from
@@ -21,8 +22,8 @@ import frc.robot.subsystems.Intake;
  * @see frc.robot.subsystems.Intake
  */
 public class TeleOpIntake extends Command {
-
-	Joystick intakeStick;
+	double rollerSpeed, cargoSpeed;
+	CargoHold cargo;
 	Intake intake;
 
 	/**
@@ -30,12 +31,16 @@ public class TeleOpIntake extends Command {
 	 * 
 	 * @see frc.robot.subsystems.Intake
 	 */
-	public TeleOpIntake() {
+	public TeleOpIntake(double roller, double cargoPower) {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.intake);
-		intake = Robot.intake;
+		requires(Robot.cargo);
 
-		intakeStick = Robot.operatorControllers.getOperatorJoystick();
+		intake = Robot.intake;
+		cargo = Robot.cargo;
+		rollerSpeed = roller;
+		cargoSpeed = cargoPower;
+
 	}
 
 	/**
@@ -55,12 +60,8 @@ public class TeleOpIntake extends Command {
 	 */
 	@Override
 	protected void execute() {
-		double power = intakeStick.getRawAxis(RobotMap.INTAKE_STICK);
-
-		if (Math.abs(power) < RobotMap.DEADZONE)
-			intake.drive(0);
-		else
-			intake.drive(power);
+		intake.drive(rollerSpeed);
+		cargo.run(cargoSpeed);
 	}
 
 	/**
@@ -78,6 +79,7 @@ public class TeleOpIntake extends Command {
 	@Override
 	protected void end() {
 		intake.stop();
+		cargo.stop();
 	}
 
 	/**
