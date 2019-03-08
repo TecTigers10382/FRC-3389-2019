@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoLift;
+import frc.robot.commands.TeleOpCargo;
 import frc.robot.commands.TeleOpEjector;
 import frc.robot.commands.TeleOpHP;
+import frc.robot.commands.TeleOpIntake;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -25,28 +27,33 @@ public class OI {
 	Joystick jsDriver = new Joystick(0);
 	Joystick jsOperator = new Joystick(1);
 
-	Button claw = new JoystickButton(jsOperator, 5);// remember to change later
+	// Button claw = new JoystickButton(jsOperator, 5);// remember to change later
 
-	Button align = new JoystickButton(jsDriver, 8);// remember to change later
-	Button eject = new JoystickButton(jsOperator, 9);// remember to change later
+	Button intake = new JoystickButton(jsOperator, 5);
+	Button outake = new JoystickButton(jsOperator, 6);
 
-	Button port1 = new JoystickButton(jsOperator, 1);
-	Button port2 = new JoystickButton(jsOperator, 2);
-	Button port3 = new JoystickButton(jsOperator, 3);
+	// Button align = new JoystickButton(jsDriver, 8);// remember to change later
+
+	Button port1 = new JoystickButton(jsOperator, 7);
+	Button port2 = new JoystickButton(jsOperator, 8);
+	Button port3 = new JoystickButton(jsOperator, 9);
 
 	/**
 	 * Sets up claw as toggle button to control the hatch panel claw.
 	 */
 	public OI() {
 		// open and close the claw used for cargo
-		claw.toggleWhenPressed(new TeleOpHP());
+		// claw.toggleWhenPressed(new TeleOpHP());
+
+		intake.whileHeld(new TeleOpIntake(.75, .75));
+		outake.whileHeld(new TeleOpIntake(-.75, -.75));
 
 		// servo on the claw that pushes the cargo out
-		eject.toggleWhenPressed(new TeleOpEjector());
+		// eject.toggleWhenPressed(new TeleOpEjector());
 
 		// uses the image tracking to align the robot with the relfective tape on the
 		// rocket
-		align.whenPressed(new AutoAlign());
+		// align.whenPressed(new AutoAlign());
 
 		// lifts to rocket port heights
 		port1.whenPressed(new AutoLift(RobotMap.PORT1));
