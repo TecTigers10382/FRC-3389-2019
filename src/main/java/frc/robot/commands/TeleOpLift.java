@@ -54,8 +54,8 @@ public class TeleOpLift extends Command {
 	protected void execute() {
 		double power = joystick.getRawAxis(RobotMap.LIFT_STICK);
 
-		if (Math.abs(power) < RobotMap.DEADZONE)
-			lift.rawLift(0);
+		if (power > 0)
+			lift.rawLift(power * .3);
 		else
 			lift.rawLift(power);
 	}

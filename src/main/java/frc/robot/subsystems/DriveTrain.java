@@ -31,7 +31,7 @@ public class DriveTrain extends Subsystem {
 	// TeleOpDrive
 
 	protected static final int kMaxNumberOfMotors = 4;
-	protected double m_maxOutput = 1;
+	protected double m_maxOutput = .80;
 	public TalonSRX leftFront;
 	public TalonSRX leftRear;
 	public TalonSRX rightFront;

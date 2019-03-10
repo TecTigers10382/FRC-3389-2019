@@ -34,7 +34,7 @@ import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
 import frc.robot.utils.TalonConfig;
-import frc.robot.utils.VisionCargoBay;
+//import frc.robot.utils.VisionCargoBay;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
 	public static NetworkTable bayReport;
 	public static NetworkTable leftLineReport;
 	public static NetworkTable rightLineReport;
-	public static VisionCargoBay bay;
+	// public static VisionCargoBay bay;
 	public static int bayListener;
 
 	public static AnalogUltraSonic ultra = new AnalogUltraSonic(RobotMap.ULTRA_INPUT);
@@ -109,19 +109,20 @@ public class Robot extends TimedRobot {
 		bayReport = NetworkTableInstance.getDefault().getTable("GRIP/bayReport");
 		leftLineReport = NetworkTableInstance.getDefault().getTable("GRIP/leftLineReport");
 		rightLineReport = NetworkTableInstance.getDefault().getTable("GRIP/rightLineReport");
-		bay = new VisionCargoBay(bayReport, leftLineReport, rightLineReport);
+		// bay = new VisionCargoBay(bayReport, leftLineReport, rightLineReport);
 
 		robotScreen = new OLEDDisplay();
 
 		prefs = Preferences.getInstance();
 
-		bayListener = bayReport.addEntryListener("height", new TableEntryListener() {
-			@Override
-			public void valueChanged(NetworkTable table, String key, NetworkTableEntry entry, NetworkTableValue value,
-					int flags) {
-				bay.processData();
-			}
-		}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+		// bayListener = bayReport.addEntryListener("height", new TableEntryListener() {
+		// @Override
+		// public void valueChanged(NetworkTable table, String key, NetworkTableEntry
+		// entry, NetworkTableValue value,
+		// int flags) {
+		// bay.processData();
+		// }
+		// }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
 	}
 
 	/**
@@ -208,23 +209,29 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());//
-		SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
+		// SmartDashboard.putNumber("Raw Degrees", bay.rawDegrees());//
+		// SmartDashboard.putNumber("Yaw Degrees", bay.yawDegrees());
 
-		SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY()); // Y distance away from target based off of
-																			// the ultradistance sensor
-		SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX()); // X distance away from target based off of
-																			// the ultradistance sensor
-		SmartDashboard.putBoolean("TargetID", bay.getTargetID()); // return true if cargo bay's reflective tape is in
-																	// view
-		SmartDashboard.putNumber("Delta X", bay.deltaX()); // X distance away from cargo bay based off of trig
-															// calculations
-		SmartDashboard.putNumber("Delta Y", bay.deltaY()); // Y distance away from cargo bay based off of trig
-															// calculations
+		// SmartDashboard.putNumber("Ultra Distance Y", bay.ultraDistanceY()); // Y
+		// distance away from target based off of
+		// // the ultradistance sensor
+		// SmartDashboard.putNumber("Ultra Distance X", bay.ultraDistanceX()); // X
+		// distance away from target based off of
+		// // the ultradistance sensor
+		// SmartDashboard.putBoolean("TargetID", bay.getTargetID()); // return true if
+		// cargo bay's reflective tape is in
+		// // view
+		// SmartDashboard.putNumber("Delta X", bay.deltaX()); // X distance away from
+		// cargo bay based off of trig
+		// // calculations
+		// SmartDashboard.putNumber("Delta Y", bay.deltaY()); // Y distance away from
+		// cargo bay based off of trig
+		// // calculations
 
-		SmartDashboard.putNumber("ClawL Position", claw.getLAngle());
-		SmartDashboard.putNumber("ClawR Position", claw.getRAngle());
-		SmartDashboard.putNumber("FL Displacement", bay.mecanumPath(bay.deltaX(), bay.deltaY(), bay.yawDegrees())[0]);
+		// SmartDashboard.putNumber("ClawL Position", claw.getLAngle());
+		// SmartDashboard.putNumber("ClawR Position", claw.getRAngle());
+		// SmartDashboard.putNumber("FL Displacement", bay.mecanumPath(bay.deltaX(),
+		// bay.deltaY(), bay.yawDegrees())[0]);
 	}
 
 	/**

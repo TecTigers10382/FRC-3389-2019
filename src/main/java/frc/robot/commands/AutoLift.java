@@ -23,8 +23,8 @@ public class AutoLift extends Command {
 	double liftHeight;
 
 	public AutoLift(double height) {
-		requires(Robot.lift);
-		lift = Robot.lift;
+		// requires(Robot.lift);
+		// lift = Robot.lift;
 		liftHeight = height;
 	}
 

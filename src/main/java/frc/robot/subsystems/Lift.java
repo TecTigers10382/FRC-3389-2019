@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.TeleOpLift;
 
@@ -48,13 +49,8 @@ public class Lift extends Subsystem {
 		// Power divided by 2 because it was too fast and caused the lift to be bouncy
 		// when moving
 
-		if (power < 0) {
-			liftR.set(ControlMode.PercentOutput, -power / 3);
-			liftL.set(ControlMode.PercentOutput, power / 3);
-		} else {
-			liftR.set(ControlMode.PercentOutput, -power);
-			liftL.set(ControlMode.PercentOutput, power);
-		}
+		liftR.set(ControlMode.PercentOutput, -power);
+		liftL.set(ControlMode.PercentOutput, power);
 
 		/*
 		 * if (power >= RobotMap.DEADZONE) { liftR.set(ControlMode.PercentOutput,
@@ -65,6 +61,7 @@ public class Lift extends Subsystem {
 		 * 0); }
 		 */
 
+		SmartDashboard.putNumber("Lift power: ", power);
 	}
 
 	public void liftPos(double height) {

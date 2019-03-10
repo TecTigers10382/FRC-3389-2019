@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import frc.robot.commands.AutoAlign;
+//import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoLift;
 import frc.robot.commands.TeleOpCargo;
 import frc.robot.commands.TeleOpEjector;
@@ -29,8 +29,8 @@ public class OI {
 
 	// Button claw = new JoystickButton(jsOperator, 5);// remember to change later
 
-	Button intake = new JoystickButton(jsOperator, 5);
-	Button outake = new JoystickButton(jsOperator, 6);
+	// Button intake = new JoystickButton(jsOperator, 5);
+	// Button outake = new JoystickButton(jsOperator, 6);
 
 	// Button align = new JoystickButton(jsDriver, 8);// remember to change later
 
@@ -45,8 +45,8 @@ public class OI {
 		// open and close the claw used for cargo
 		// claw.toggleWhenPressed(new TeleOpHP());
 
-		intake.whileHeld(new TeleOpIntake(.75, .75));
-		outake.whileHeld(new TeleOpIntake(-.75, -.75));
+		// intake.whileHeld(new TeleOpIntake(.75, .75));
+		// outake.whileHeld(new TeleOpIntake(-.75, -.75));
 
 		// servo on the claw that pushes the cargo out
 		// eject.toggleWhenPressed(new TeleOpEjector());
@@ -56,9 +56,9 @@ public class OI {
 		// align.whenPressed(new AutoAlign());
 
 		// lifts to rocket port heights
-		port1.whenPressed(new AutoLift(RobotMap.PORT1));
-		port2.whenPressed(new AutoLift(RobotMap.PORT2));
-		port3.whenPressed(new AutoLift(RobotMap.PORT3));
+		// port1.whenPressed(new AutoLift(RobotMap.PORT1));
+		// port2.whenPressed(new AutoLift(RobotMap.PORT2));
+		// port3.whenPressed(new AutoLift(RobotMap.PORT3));
 	}
 
 	/**

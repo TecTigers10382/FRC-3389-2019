@@ -61,7 +61,7 @@ public class TeleOpIntake extends Command {
 	@Override
 	protected void execute() {
 		intake.drive(rollerSpeed);
-		cargo.run(cargoSpeed);
+		cargo.run(-cargoSpeed);
 	}
 
 	/**
