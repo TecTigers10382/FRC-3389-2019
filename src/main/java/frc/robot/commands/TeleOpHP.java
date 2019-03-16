@@ -19,17 +19,19 @@ import frc.robot.subsystems.HPClaw;
  * @see frc.robot.subsystems.HPClaw
  */
 public class TeleOpHP extends Command {
-	HPClaw claw;
+	HPClaw hook;
+	double speed;
 
 	/**
 	 * Constructor gains control of the HPClaw subsystem of the robot.
 	 * 
 	 * @see frc.robot.subsystems.HPClaw
 	 */
-	public TeleOpHP() {
+	public TeleOpHP(double power) {
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.claw);
-		claw = Robot.claw;
+		hook = Robot.claw;
+		speed = power;
 	}
 
 	// Called just before this Command runs the first time
@@ -44,7 +46,7 @@ public class TeleOpHP extends Command {
 	 */
 	@Override
 	protected void execute() {
-		claw.open();
+		hook.run(speed);
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class TeleOpHP extends Command {
 	 */
 	@Override
 	protected void end() {
-		claw.close();
+		hook.stop();
 	}
 
 	/**
