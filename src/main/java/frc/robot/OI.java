@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 //import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoLift;
 import frc.robot.commands.TeleOpCargo;
-import frc.robot.commands.TeleOpEjector;
 import frc.robot.commands.TeleOpHP;
 import frc.robot.commands.TeleOpIntake;
 
@@ -32,6 +31,9 @@ public class OI {
 	Button intake = new JoystickButton(jsOperator, 5);
 	Button outake = new JoystickButton(jsOperator, 6);
 
+	Button hookUp = new JoystickButton(jsOperator, 1);
+	Button hookDown = new JoystickButton(jsOperator, 4);
+
 	// Button align = new JoystickButton(jsDriver, 8);// remember to change later
 
 	Button port1 = new JoystickButton(jsOperator, 7);
@@ -47,6 +49,9 @@ public class OI {
 
 		intake.whileHeld(new TeleOpIntake(.75, .75));
 		outake.whileHeld(new TeleOpIntake(-.75, -.75));
+
+		hookUp.whileHeld(new TeleOpHP(.3));
+		hookDown.whileHeld(new TeleOpHP(-.3));
 
 		// servo on the claw that pushes the cargo out
 		// eject.toggleWhenPressed(new TeleOpEjector());
