@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -21,43 +22,21 @@ public class HPClaw extends Subsystem {
 	// Commands that use this subsystem.
 	// TeleOpHP
 
-	Servo clawL, clawR;
+	VictorSP hook;
 
 	/**
 	 * Constructor. Initializes Servo.
 	 */
 	public HPClaw() {
-		clawL = new Servo(1);
-		clawR = new Servo(2);
+		hook = new VictorSP(5);
 	}
 
-	/**
-	 * Closes claw by setting servo angle to 0
-	 */
-	public void close() {
-		clawL.setAngle(0);
-		clawR.setAngle(0);
+	public void run(double power) {
+		hook.set(power);
 	}
 
-	/**
-	 * Opens claw by setting servo angle to 30
-	 */
-	public void open() {
-		clawL.setAngle(180);
-		clawR.setAngle(180);
-	}
-
-	public void toEject() {
-		clawL.setAngle(15);
-		clawR.setAngle(15);
-	}
-
-	public double getLAngle() {
-		return clawL.getAngle();
-	}
-
-	public double getRAngle() {
-		return clawR.getAngle();
+	public void stop() {
+		hook.set(0);
 	}
 
 	@Override
