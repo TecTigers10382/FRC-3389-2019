@@ -34,7 +34,7 @@ public class RobotMap {
 	/**
 	 * IDs of axes on the joysticks.
 	 */
-	public static final int LEFT_X_STICK = 0, LEFT_Y_STICK = 1, RIGHT_DRIVE_STICK = 4;
+	public static final int LEFT_X_STICK = 0, LEFT_Y_STICK = 1, RIGHT_X_STICK = 4, RIGHT_Y_STICK = 5;
 	public static final int INTAKE_STICK = 1, LIFT_STICK = 5;
 
 	public static final int POT_INPUT = 3;
