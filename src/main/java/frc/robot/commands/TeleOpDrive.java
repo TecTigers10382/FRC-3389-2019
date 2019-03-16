@@ -55,9 +55,9 @@ public class TeleOpDrive extends Command {
 	 */
 	@Override
 	protected void execute() {
-		double x = driveStick.getRawAxis(RobotMap.LEFT_X_STICK);
-		double y = driveStick.getRawAxis(RobotMap.LEFT_Y_STICK);
-		double rotation = driveStick.getRawAxis(RobotMap.RIGHT_DRIVE_STICK);
+		double x = (driveStick.getRawAxis(RobotMap.LEFT_X_STICK) + (driveStick.getRawAxis(RobotMap.RIGHT_X_STICK)) / 2);
+		double y = (driveStick.getRawAxis(RobotMap.LEFT_Y_STICK) + (driveStick.getRawAxis(RobotMap.RIGHT_Y_STICK)) / 2);
+		double rotation = driveStick.getRawAxis(RobotMap.RIGHT_Y_STICK) - driveStick.getRawAxis(RobotMap.LEFT_Y_STICK);
 
 		if (Math.abs(x) < RobotMap.DEADZONE)
 			x = 0;
