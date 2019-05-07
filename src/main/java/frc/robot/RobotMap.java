@@ -21,6 +21,7 @@ public class RobotMap {
 	 */
 	public final static int DRIVE_LEFTFRONT = 4, DRIVE_LEFTREAR = 0, DRIVE_RIGHTFRONT = 3, DRIVE_RIGHTREAR = 1;
 
+	public final static int WINTCH = 7;
 	/**
 	 * CAN IDs of all Talon SRXs used for lift.
 	 */
@@ -34,7 +35,7 @@ public class RobotMap {
 	/**
 	 * IDs of axes on the joysticks.
 	 */
-	public static final int LEFT_X_STICK = 0, LEFT_Y_STICK = 1, RIGHT_X_STICK = 4, RIGHT_Y_STICK = 5;
+	public static final int LEFT_X_STICK = 0, LEFT_Y_STICK = 1, RIGHT_X_STICK = 2, RIGHT_Y_STICK = 3;
 	public static final int INTAKE_STICK = 1, LIFT_STICK = 5;
 
 	public static final int POT_INPUT = 3;
