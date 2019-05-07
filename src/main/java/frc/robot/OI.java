@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 //import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoLift;
 import frc.robot.commands.TeleOpCargo;
-import frc.robot.commands.TeleOpHP;
+// import frc.robot.commands.TeleOpHP;
 import frc.robot.commands.TeleOpIntake;
+import frc.robot.commands.TeleOpWintch;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -26,13 +27,14 @@ public class OI {
 	Joystick jsDriver = new Joystick(0);
 	Joystick jsOperator = new Joystick(1);
 
-	// Button claw = new JoystickButton(jsOperator, 5);// remember to change later
+	Button deploy = new JoystickButton(jsDriver, 6);// right deploy
+	Button retract = new JoystickButton(jsDriver, 5);// left retract
 
 	Button intake = new JoystickButton(jsOperator, 5);
 	Button outake = new JoystickButton(jsOperator, 6);
 
-	Button hookUp = new JoystickButton(jsOperator, 1);
-	Button hookDown = new JoystickButton(jsOperator, 4);
+	// Button hookUp = new JoystickButton(jsOperator, 1);
+	// Button hookDown = new JoystickButton(jsOperator,ee1 4);
 
 	// Button align = new JoystickButton(jsDriver, 8);// remember to change later
 
@@ -50,8 +52,8 @@ public class OI {
 		intake.whileHeld(new TeleOpIntake(.75, .75));
 		outake.whileHeld(new TeleOpIntake(-.75, -.75));
 
-		hookUp.whileHeld(new TeleOpHP(.3));
-		hookDown.whileHeld(new TeleOpHP(-.3));
+		deploy.whileHeld(new TeleOpWintch(.65));
+		retract.whileHeld(new TeleOpWintch(-.65));
 
 		// servo on the claw that pushes the cargo out
 		// eject.toggleWhenPressed(new TeleOpEjector());

@@ -30,9 +30,10 @@ import frc.robot.subsystems.CargoHold;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Ejector;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.HPClaw;
+// import frc.robot.subsystems.HPClaw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Wintch;
 import frc.robot.utils.TalonConfig;
 //import frc.robot.utils.VisionCargoBay;
 
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
 
 	public static final Intake intake = new Intake();
 	public static final Lift lift = new Lift();
-	public static final HPClaw claw = new HPClaw();
+	public static final Wintch wintch = new Wintch();
 	public static final Ejector eject = new Ejector();
 	public static final CargoHold cargo = new CargoHold();
 
@@ -94,7 +95,7 @@ public class Robot extends TimedRobot {
 			intake.configTalons(talonConfig.talon);
 		}
 
-		CameraServer.getInstance().startAutomaticCapture();
+		camera = CameraServer.getInstance().startAutomaticCapture();
 
 		// Starts streaming camera to driver station and gets results from GRIP
 		// camera = CameraServer.getInstance().startAutomaticCapture();
